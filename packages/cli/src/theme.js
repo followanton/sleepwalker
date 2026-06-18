@@ -34,8 +34,12 @@ function shouldUseColor(env, stdout) {
 }
 
 function wrap(enabled, code, value) {
-  const text = String(value ?? "");
+  const text = sanitizeTerminalText(value);
   return enabled ? `${code}${text}${RESET}` : text;
+}
+
+export function sanitizeTerminalText(value) {
+  return String(value ?? "").replace(/[\x00-\x08\x0B\x0C\x0E-\x1F\x7F-\x9F]/g, "");
 }
 
 export function createTheme({ env = process.env, stdout = process.stdout } = {}) {

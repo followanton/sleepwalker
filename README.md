@@ -59,7 +59,7 @@ node ./bin/sleepwalker.js doctor
 node ./bin/sleepwalker.js menu
 ```
 
-The intended public npm package name is still being finalized. Until the npm
+The intended public npm package name is `@sleepwalkerai/cli`. Until the npm
 package is published, use the repository checkout flow above.
 
 ## API Quick Example

@@ -148,10 +148,11 @@ test("supports forced color and NO_COLOR", async () => {
 test("stores and masks API key", async () => {
   const dir = fs.mkdtempSync(path.join(os.tmpdir(), "sleepwalker-cli-"));
   const { io, stdout } = memoryIo({ env: { SLEEPWALKER_CONFIG_DIR: dir } });
-  await runCli(["auth", "key", "set", "test_api_key_not_real"], io);
-  assert.match(stdout(), /Stored API key test_api/);
+  await runCli(["auth", "key", "set", "test_api_key_not_real_abcdefghijklmnopqrstuvwxyz"], io);
+  assert.match(stdout(), /Stored API key test_api_key/);
   const stored = JSON.parse(fs.readFileSync(path.join(dir, "config.json"), "utf8"));
-  assert.equal(stored.apiKey, "test_api_key_not_real");
+  assert.equal(stored.apiKey, "test_api_key_not_real_abcdefghijklmnopqrstuvwxyz");
+  assert.equal(fs.statSync(path.join(dir, "config.json")).mode & 0o777, 0o600);
 });
 
 test("stores API base URL override", async () => {
@@ -165,6 +166,26 @@ test("stores API base URL override", async () => {
   const shown = memoryIo({ env: { SLEEPWALKER_CONFIG_DIR: dir } });
   await runCli(["config", "show"], shown.io);
   assert.match(shown.stdout(), /https:\/\/api\.example\.com/);
+});
+
+test("allows HTTP API base URL only for loopback hosts", async () => {
+  const dir = fs.mkdtempSync(path.join(os.tmpdir(), "sleepwalker-cli-"));
+  const local = memoryIo({ env: { SLEEPWALKER_CONFIG_DIR: dir } });
+  await runCli(["config", "set", "api-base-url", "http://127.0.0.1:8010/"], local.io);
+  const stored = JSON.parse(fs.readFileSync(path.join(dir, "config.json"), "utf8"));
+  assert.equal(stored.apiBaseUrl, "http://127.0.0.1:8010");
+
+  const remote = memoryIo({ env: { SLEEPWALKER_CONFIG_DIR: fs.mkdtempSync(path.join(os.tmpdir(), "sleepwalker-cli-")) } });
+  await assert.rejects(
+    () => runCli(["config", "set", "api-base-url", "http://api.example.com"], remote.io),
+    /HTTP API base URLs are only allowed for localhost/,
+  );
+
+  const fakeLoopback = memoryIo({ env: { SLEEPWALKER_CONFIG_DIR: fs.mkdtempSync(path.join(os.tmpdir(), "sleepwalker-cli-")) } });
+  await assert.rejects(
+    () => runCli(["config", "set", "api-base-url", "http://127.example.com"], fakeLoopback.io),
+    /HTTP API base URLs are only allowed for localhost/,
+  );
 });
 
 test("calls usage endpoint for credits", async () => {
@@ -281,7 +302,7 @@ test("visibility run human output includes next status commands", async () => {
   assert.match(stdout(), /Prompts\s+2/);
   assert.match(stdout(), /Probes\s+2/);
   assert.match(stdout(), /Reserved credits\s+2\.00/);
-  assert.match(stdout(), /sleepwalker visibility status vis_123 --results/);
+  assert.match(stdout(), /sleepwalker visibility status 'vis_123' --results/);
 });
 
 test("visibility run --json returns untouched API payload", async () => {
@@ -307,6 +328,28 @@ test("visibility run --json returns untouched API payload", async () => {
     "--json",
   ], io);
   assert.deepEqual(JSON.parse(stdout()), body);
+});
+
+test("suggested visibility command shell-quotes untrusted values", async () => {
+  const { io, stdout } = memoryIo({
+    env: { SLEEPWALKER_API_KEY: "sw_api_live_test" },
+    responses: [{
+      status: 200,
+      body: {
+        prompts: ["What's the best package registry? $(say bad)\u001b[31m"],
+      },
+    }],
+  });
+  await runCli([
+    "visibility",
+    "suggest-prompts",
+    "https://example.com/path?a=$(say bad)",
+    "--brand",
+    "NPM'; rm -rf / #",
+  ], io);
+  assert.doesNotMatch(stdout(), /\u001b/);
+  assert.match(stdout(), /sleepwalker visibility run 'https:\/\/example\.com\/path\?a=\$\(say bad\)' --brand 'NPM'\\''; rm -rf \/ #'/);
+  assert.match(stdout(), /--prompt 'What'\\''s the best package registry\? \$\(say bad\)\[31m'/);
 });
 
 test("colors run status in human output when color is forced", async () => {
@@ -449,12 +492,13 @@ test("accepts --url for action commands", async () => {
 });
 
 test("page serialize summarizes human output and preserves JSON payload", async () => {
+  const dangerousContent = "## Page: Example\u001b]52;c;Y2xpcGJvYXJk\u0007\n\nUseful\u001b[2J content for agents.";
   const body = {
     serialization: {
       url: "https://example.com",
       http_status: 200,
-      content_view: "## Page: Example\n\nUseful content for agents.",
-      content_view_chars: 43,
+      content_view: dangerousContent,
+      content_view_chars: dangerousContent.length,
       billing: {
         status: "settled",
         settled_credits: "1.00",
@@ -467,9 +511,10 @@ test("page serialize summarizes human output and preserves JSON payload", async 
   });
   await runCli(["page", "serialize", "https://example.com"], human.io);
   assert.match(human.stdout(), /Page serialized/);
-  assert.match(human.stdout(), /Content\s+43 chars/);
   assert.match(human.stdout(), /Preview/);
-  assert.match(human.stdout(), /sleepwalker page serialize https:\/\/example\.com --json/);
+  assert.match(human.stdout(), /Useful\[2J content/);
+  assert.doesNotMatch(human.stdout(), /\u001b|\u0007/);
+  assert.match(human.stdout(), /sleepwalker page serialize 'https:\/\/example\.com' --json/);
 
   const json = memoryIo({
     env: { SLEEPWALKER_API_KEY: "sw_api_live_test" },
@@ -477,6 +522,7 @@ test("page serialize summarizes human output and preserves JSON payload", async 
   });
   await runCli(["page", "serialize", "https://example.com", "--json"], json.io);
   assert.deepEqual(JSON.parse(json.stdout()), body);
+  assert.match(json.stdout(), /\\u001b|\\u0007/);
 });
 
 test("ci score human output includes recommendations and next commands", async () => {
@@ -491,7 +537,7 @@ test("ci score human output includes recommendations and next commands", async (
         trend_source: "generated",
         freshness_score: 78,
         sufficiency_score: 82,
-        top_recommendations: ["Add clearer proof points", "Show benchmark views"],
+        top_recommendations: ["Add clearer proof points\u001b[31m", "Show benchmark views"],
         billing: {
           status: "settled",
           settled_credits: "3.00",
@@ -503,8 +549,9 @@ test("ci score human output includes recommendations and next commands", async (
   assert.match(stdout(), /Content score/);
   assert.match(stdout(), /81 - Good/);
   assert.match(stdout(), /Top recommendations/);
+  assert.doesNotMatch(stdout(), /\u001b/);
   assert.match(stdout(), /Settled credits\s+3\.00/);
-  assert.match(stdout(), /sleepwalker ci run https:\/\/example\.com --depth full/);
+  assert.match(stdout(), /sleepwalker ci run 'https:\/\/example\.com' --depth full/);
 });
 
 test("interactive visibility run includes generated idempotency key", async () => {

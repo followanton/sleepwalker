@@ -8,7 +8,7 @@ analysis locally.
 Provisional public package target:
 
 ```text
-@sleepwalker/cli
+@sleepwalkerai/cli
 ```
 
 The package remains private until the npm scope and release process are
@@ -19,10 +19,11 @@ finalized. Use the local checkout flow below during the developer preview.
 From this repository:
 
 ```bash
-node sleepwalker-cli/bin/sleepwalker.js
-node sleepwalker-cli/bin/sleepwalker.js menu
-node sleepwalker-cli/bin/sleepwalker.js init
-node sleepwalker-cli/bin/sleepwalker.js commands
+cd packages/cli
+node ./bin/sleepwalker.js
+node ./bin/sleepwalker.js menu
+node ./bin/sleepwalker.js init
+node ./bin/sleepwalker.js commands
 ```
 
 The npm install and `npx` flow will be documented after the package is
@@ -32,21 +33,21 @@ With an API key:
 
 ```bash
 export SLEEPWALKER_API_KEY=sw_api_live_...
-node sleepwalker-cli/bin/sleepwalker.js credits
+node ./bin/sleepwalker.js credits
 ```
 
 Or store the key locally:
 
 ```bash
-node sleepwalker-cli/bin/sleepwalker.js auth key set sw_api_live_...
-node sleepwalker-cli/bin/sleepwalker.js doctor
+node ./bin/sleepwalker.js auth key set sw_api_live_...
+node ./bin/sleepwalker.js doctor
 ```
 
 To point the CLI at a non-production API base:
 
 ```bash
-node sleepwalker-cli/bin/sleepwalker.js config set api-base-url https://api.sleepwalker.ai
-node sleepwalker-cli/bin/sleepwalker.js config show
+node ./bin/sleepwalker.js config set api-base-url https://api.sleepwalker.ai
+node ./bin/sleepwalker.js config show
 ```
 
 ## Examples
@@ -117,5 +118,5 @@ or `FORCE_COLOR=1` to force it in supported terminals.
 If your current shell exports `NO_COLOR`, remove it while previewing:
 
 ```bash
-env -u NO_COLOR FORCE_COLOR=1 node sleepwalker-cli/bin/sleepwalker.js --help
+env -u NO_COLOR FORCE_COLOR=1 node ./bin/sleepwalker.js --help
 ```

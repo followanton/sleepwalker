@@ -1,5 +1,5 @@
 {
-  "name": "@sleepwalker/cli",
+  "name": "@sleepwalkerai/cli",
   "version": "0.1.0",
   "description": "Command-line client for the Sleepwalker API.",
   "type": "module",

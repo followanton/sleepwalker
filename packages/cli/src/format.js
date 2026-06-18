@@ -1,4 +1,4 @@
-import { createTheme, styleStatus } from "./theme.js";
+import { createTheme, sanitizeTerminalText, styleStatus } from "./theme.js";
 
 export function printJson(stdout, value) {
   stdout.write(`${JSON.stringify(value, null, 2)}\n`);
@@ -34,9 +34,9 @@ function valueCount(value) {
 
 function valueLabel(value) {
   if (Array.isArray(value)) {
-    return value.join(", ");
+    return value.map((item) => sanitizeTerminalText(item)).join(", ");
   }
-  return value;
+  return sanitizeTerminalText(value);
 }
 
 function hasNonZeroCreditValue(value) {
@@ -96,7 +96,7 @@ export function printRunSummary(stdout, payload, type, theme = createTheme({ std
     ["Run ID", id ? theme.id(id) : "unknown"],
     ["Status", styleStatus(theme, run.status || "unknown")],
     ["URL", run.url ? theme.info(run.url) : ""],
-    ["Target", run.target_entity || run.brand_name || run.target || ""],
+    ["Target", sanitizeTerminalText(run.target_entity || run.brand_name || run.target || "")],
     ["Platforms", valueLabel(platforms) || ""],
     ["Prompts", promptCount || ""],
     ["Platform count", !platforms && platformCount ? platformCount : ""],

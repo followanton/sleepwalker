@@ -32,10 +32,13 @@ export function readConfig(env = process.env) {
 export function writeConfig(config, env = process.env) {
   const dir = configDir(env);
   fs.mkdirSync(dir, { recursive: true, mode: 0o700 });
-  fs.writeFileSync(configPath(env), `${JSON.stringify(config, null, 2)}\n`, {
+  fs.chmodSync(dir, 0o700);
+  const file = configPath(env);
+  fs.writeFileSync(file, `${JSON.stringify(config, null, 2)}\n`, {
     encoding: "utf8",
     mode: 0o600,
   });
+  fs.chmodSync(file, 0o600);
 }
 
 export function getApiBaseUrl(env = process.env, config = readConfig(env)) {

@@ -1,4 +1,5 @@
 import readline from "node:readline";
+import net from "node:net";
 import {
   configPath,
   getApiBaseUrlSource,
@@ -17,7 +18,7 @@ import {
   readLinesFromFile,
 } from "./args.js";
 import { printJson, printKeyValue, printList, printNextCommands, printRunSummary } from "./format.js";
-import { createTheme, renderCommandsHelp, renderHelp, styleStatus } from "./theme.js";
+import { createTheme, renderCommandsHelp, renderHelp, sanitizeTerminalText, styleStatus } from "./theme.js";
 
 const VERSION = "0.1.0";
 const DEFAULT_POLL_INTERVAL_MS = 5000;
@@ -84,7 +85,7 @@ function interactiveIdempotencyKey(io, prefix) {
 }
 
 function shortPreview(value, maxChars = 700) {
-  const text = String(value || "").trim();
+  const text = sanitizeTerminalText(value).trim();
   if (!text) {
     return "";
   }
@@ -92,6 +93,25 @@ function shortPreview(value, maxChars = 700) {
     return text;
   }
   return `${text.slice(0, maxChars).trimEnd()}\n...`;
+}
+
+function shellQuote(value) {
+  const text = sanitizeTerminalText(value);
+  if (!text) {
+    return "''";
+  }
+  return `'${text.replace(/'/g, "'\\''")}'`;
+}
+
+function isLoopbackHost(hostname) {
+  const value = String(hostname || "").toLowerCase().replace(/^\[|\]$/g, "");
+  if (value === "localhost" || value === "::1") {
+    return true;
+  }
+  if (net.isIP(value) === 4) {
+    return value.split(".")[0] === "127";
+  }
+  return false;
 }
 
 function firstDefined(...values) {
@@ -272,6 +292,9 @@ function normalizeApiBaseUrl(value) {
   }
   if (!["https:", "http:"].includes(parsed.protocol)) {
     throw makeError("API base URL must start with https:// or http://.");
+  }
+  if (parsed.protocol === "http:" && !isLoopbackHost(parsed.hostname)) {
+    throw makeError("HTTP API base URLs are only allowed for localhost or loopback addresses. Use https:// for remote API hosts.");
   }
   return parsed.toString().replace(/\/+$/, "");
 }
@@ -767,7 +790,7 @@ async function handleReports(args, flags, io) {
         const runs = match.runs || [];
         const latest = runs[0] || {};
         const result = latest.overall_band || latest.status || "no runs";
-        return `${theme.id(test.id || "")}  ${theme.muted(formatTestType(test.test_type))}  ${test.name || "Untitled"}  ${theme.info(test.url || "")}  ${styleStatus(theme, result)}`;
+        return `${theme.id(test.id || "")}  ${theme.muted(formatTestType(test.test_type))}  ${sanitizeTerminalText(test.name || "Untitled")}  ${theme.info(test.url || "")}  ${styleStatus(theme, result)}`;
       });
     }
   });
@@ -807,7 +830,7 @@ async function handleActivity(args, flags, io) {
       const status = item.status || "unknown";
       const action = item.action || item.kind || "request";
       const credits = item.credits || item.estimated_credits || "";
-      return `${theme.muted(item.created_at || "")}  ${theme.info(source)}  ${action}  ${styleStatus(theme, status)}${credits ? `  ${theme.warning(`${credits} credits`)}` : ""}`;
+      return `${theme.muted(item.created_at || "")}  ${theme.info(source)}  ${sanitizeTerminalText(action)}  ${styleStatus(theme, status)}${credits ? `  ${theme.warning(`${credits} credits`)}` : ""}`;
     });
   });
 }
@@ -826,7 +849,7 @@ async function handleTests(args, flags, io) {
   });
   output(io.stdout, flags, payload, (data) => {
     printList(io.stdout, data.tests || data.items || [], (test) => {
-      return `${theme.id(test.id || "")}  ${theme.muted(test.test_type || "")}  ${test.name || test.title || "Untitled"}  ${theme.info(test.url || "")}`;
+      return `${theme.id(test.id || "")}  ${theme.muted(test.test_type || "")}  ${sanitizeTerminalText(test.name || test.title || "Untitled")}  ${theme.info(test.url || "")}`;
     });
   });
 }
@@ -847,7 +870,7 @@ async function handlePage(args, flags, io) {
   output(io.stdout, flags, payload, (data) => {
     const serialization = data.serialization || data;
     if (serialization.blocked || serialization.serialization_issue || data.blocked || data.serialization_issue) {
-      io.stdout.write(`${serialization.blocked_message || serialization.issue_message || data.blocked_message || data.issue_message || "Page could not be serialized."}\n`);
+      io.stdout.write(`${sanitizeTerminalText(serialization.blocked_message || serialization.issue_message || data.blocked_message || data.issue_message || "Page could not be serialized.")}\n`);
       return;
     }
     const contentView = serialization.content_view || "";
@@ -863,8 +886,8 @@ async function handlePage(args, flags, io) {
       io.stdout.write(`\n${theme.accent("Preview")}\n${preview}\n`);
     }
     printNextCommands(io.stdout, [
-      `sleepwalker page serialize ${serialization.url || url} --json`,
-      `sleepwalker reports by-url ${serialization.url || url}`,
+      `sleepwalker page serialize ${shellQuote(serialization.url || url)} --json`,
+      `sleepwalker reports by-url ${shellQuote(serialization.url || url)}`,
     ], theme);
   });
 }
@@ -885,10 +908,10 @@ async function handleVisibility(args, flags, io) {
     });
     output(io.stdout, flags, payload, (data) => {
       const prompts = data.prompts || [];
-      printList(io.stdout, prompts, (prompt) => `${theme.accent("-")} ${prompt}`);
+      printList(io.stdout, prompts, (prompt) => `${theme.accent("-")} ${sanitizeTerminalText(prompt)}`);
       if (prompts.length) {
         printNextCommands(io.stdout, [
-          `sleepwalker visibility run ${url} --brand "${brand}" --prompt "${String(prompts[0]).replace(/"/g, '\\"')}" --platform perplexity`,
+          `sleepwalker visibility run ${shellQuote(url)} --brand ${shellQuote(brand)} --prompt ${shellQuote(prompts[0])} --platform perplexity`,
         ], theme);
       }
     });
@@ -928,14 +951,14 @@ async function handleVisibility(args, flags, io) {
       });
       output(io.stdout, flags, watched, (data) => printRunSummary(io.stdout, data, theme.accent("AI Visibility"), theme, {
         nextCommands: [
-          data.run_id ? `sleepwalker visibility status ${data.run_id} --results` : "",
+          data.run_id ? `sleepwalker visibility status ${shellQuote(data.run_id)} --results` : "",
         ],
       }));
     } else {
       output(io.stdout, flags, payload, (data) => printRunSummary(io.stdout, data, theme.accent("AI Visibility"), theme, {
         nextCommands: [
-          data.run_id ? `sleepwalker visibility status ${data.run_id} --results` : "",
-          data.run_id ? `sleepwalker visibility status ${data.run_id} --results --json` : "",
+          data.run_id ? `sleepwalker visibility status ${shellQuote(data.run_id)} --results` : "",
+          data.run_id ? `sleepwalker visibility status ${shellQuote(data.run_id)} --results --json` : "",
         ],
       }));
     }
@@ -952,7 +975,7 @@ async function handleVisibility(args, flags, io) {
     });
     output(io.stdout, flags, payload, (data) => printRunSummary(io.stdout, data, theme.accent("AI Visibility"), theme, {
       nextCommands: [
-        data.run_id ? `sleepwalker visibility status ${data.run_id} --results --json` : "",
+        data.run_id ? `sleepwalker visibility status ${shellQuote(data.run_id)} --results --json` : "",
       ],
     }));
     return;
@@ -991,7 +1014,7 @@ async function handleCi(args, flags, io) {
     });
     output(io.stdout, flags, payload, (data) => {
       if (data.content_score_issue || data.blocked || data.site_error) {
-        io.stdout.write(`${data.issue_message || data.blocked_message || data.site_error_message || "Content could not be scored."}\n`);
+        io.stdout.write(`${sanitizeTerminalText(data.issue_message || data.blocked_message || data.site_error_message || "Content could not be scored.")}\n`);
         return;
       }
       io.stdout.write(`${theme.ci("Content score")}\n\n`);
@@ -1006,11 +1029,11 @@ async function handleCi(args, flags, io) {
       const recommendations = data.top_recommendations || [];
       if (recommendations.length) {
         io.stdout.write(`\n${theme.ci("Top recommendations")}\n`);
-        printList(io.stdout, recommendations.slice(0, 3), (item) => `${theme.ci("-")} ${item}`);
+        printList(io.stdout, recommendations.slice(0, 3), (item) => `${theme.ci("-")} ${sanitizeTerminalText(item)}`);
       }
       printNextCommands(io.stdout, [
-        `sleepwalker ci score ${url} --json`,
-        `sleepwalker ci run ${url} --depth full`,
+        `sleepwalker ci score ${shellQuote(url)} --json`,
+        `sleepwalker ci run ${shellQuote(url)} --depth full`,
       ], theme);
     });
     return;
@@ -1038,14 +1061,14 @@ async function handleCi(args, flags, io) {
       });
       output(io.stdout, flags, watched, (data) => printRunSummary(io.stdout, data, theme.ci("Content Intelligence"), theme, {
         nextCommands: [
-          data.run_id ? `sleepwalker ci status ${data.run_id} --result` : "",
+          data.run_id ? `sleepwalker ci status ${shellQuote(data.run_id)} --result` : "",
         ],
       }));
     } else {
       output(io.stdout, flags, payload, (data) => printRunSummary(io.stdout, data, theme.ci("Content Intelligence"), theme, {
         nextCommands: [
-          data.run_id ? `sleepwalker ci status ${data.run_id} --result` : "",
-          data.run_id ? `sleepwalker ci status ${data.run_id} --result --json` : "",
+          data.run_id ? `sleepwalker ci status ${shellQuote(data.run_id)} --result` : "",
+          data.run_id ? `sleepwalker ci status ${shellQuote(data.run_id)} --result --json` : "",
         ],
       }));
     }
@@ -1059,7 +1082,7 @@ async function handleCi(args, flags, io) {
     });
     output(io.stdout, flags, payload, (data) => printRunSummary(io.stdout, data, theme.ci("Content Intelligence"), theme, {
       nextCommands: [
-        data.run_id ? `sleepwalker ci status ${data.run_id} --result --json` : "",
+        data.run_id ? `sleepwalker ci status ${shellQuote(data.run_id)} --result --json` : "",
       ],
     }));
     return;
