@@ -1,0 +1,25 @@
+{
+  "name": "@sleepwalker/cli",
+  "version": "0.1.0",
+  "description": "Command-line client for the Sleepwalker API.",
+  "type": "module",
+  "bin": {
+    "sleepwalker": "./bin/sleepwalker.js"
+  },
+  "scripts": {
+    "test": "node --test",
+    "smoke": "node ./bin/sleepwalker.js --help",
+    "smoke:live": "node ./scripts/smoke.js"
+  },
+  "engines": {
+    "node": ">=18.17"
+  },
+  "files": [
+    "bin",
+    "src",
+    "scripts",
+    "README.md"
+  ],
+  "license": "MIT",
+  "private": true
+}
