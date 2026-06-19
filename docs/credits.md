@@ -3,7 +3,7 @@
 Sleepwalker uses prepaid credits for billable actions.
 
 Read-only actions are normally unmetered. Billable actions use the same credit
-behavior across Console, API, MCP, and CLI.
+behavior across the app, API, MCP, and CLI.
 
 Examples of billable actions:
 
@@ -13,7 +13,7 @@ Examples of billable actions:
 - Content Intelligence scoring;
 - Content Intelligence runs.
 
-Credits are managed in the hosted Console:
+Credits are managed in the hosted app:
 
 ```text
 https://app.sleepwalker.ai

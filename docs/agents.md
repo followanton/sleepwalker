@@ -1,19 +1,19 @@
 # Sleepwalker for agents
 
-Sleepwalker is agent-native. It is not a dashboard with an API stapled on. Every action runs through the same governed layer whether a human clicks it or an agent calls it, so you can hand an AI agent a real job ("watch how our brand shows up in AI search and tell me what to fix") and trust that it spends credits safely and leaves an audit trail.
+Sleepwalker gives agents a practical tool surface for AI Visibility and Content Intelligence. A human can click a run in the app, an agent can call it through MCP, and a product can call it through the API. The result is the same: a saved run with answers, citations, recommendations, credits, and status in one workspace.
 
 ## The loop
 
 ```mermaid
 flowchart LR
-  A["Your agent<br/>(Claude, etc.)"] -->|MCP tool call| B["Governed<br/>actions"]
-  B --> C{"credits · auth<br/>scopes · safety"}
+  A["Your agent<br/>(Claude, etc.)"] -->|MCP tool call| B["Sleepwalker<br/>tools"]
+  B --> C{"prompts · pages<br/>credits · status"}
   C -->|allowed| D["AI Visibility<br/>Content Intelligence<br/>Serialization"]
   D --> E[("Results,<br/>credits, activity")]
   E -->|read back| A
 ```
 
-Connect once, then talk to your agent in plain language. The agent picks the right tool, the governed layer decides whether the action is allowed, and results are saved so any surface can read them later.
+Connect once, then talk to your agent in plain language. The agent picks the right tool, Sleepwalker runs the action, and the result is saved so the app, API, CLI, and MCP can read it later.
 
 ## Connect
 
@@ -24,7 +24,7 @@ https://mcp.sleepwalker.ai/mcp
 ```
 
 - **OAuth** is the recommended flow for clients that support it (Claude and most connector platforms). You sign in to Sleepwalker and authorize access. No long-lived token to copy. See [examples/mcp/oauth.md](../examples/mcp/oauth.md).
-- **Bearer token** is available for custom or local clients. Create an MCP token in the Console and pass it as `Authorization: Bearer sw_mcp_live_...`. See [examples/mcp/bearer-token.md](../examples/mcp/bearer-token.md).
+- **Bearer token** is available for custom or local clients. Create an MCP token in the Sleepwalker app and pass it as `Authorization: Bearer sw_mcp_live_...`. See [examples/mcp/bearer-token.md](../examples/mcp/bearer-token.md).
 
 > [!NOTE]
 > Hosted OAuth is designed to request the Sleepwalker read and action scopes, so the tools advertised by the connector work out of the box. Billable actions still require prepaid credits and are recorded in Activity. Bearer-token setups can be scoped more narrowly for custom clients.
@@ -57,7 +57,7 @@ https://mcp.sleepwalker.ai/mcp
 | `score_sleepwalker_content` | Score a page, get fixes | Billable action |
 | `create_sleepwalker_content_run` | Persisted Content Intelligence run | Billable run |
 
-The Console and hosted billing docs are the source of truth for pricing.
+The Sleepwalker app and hosted billing docs are the source of truth for pricing.
 
 ## Walkthrough: ask Claude to watch your brand
 
@@ -71,9 +71,9 @@ Claude calls `suggest_sleepwalker_visibility_prompts` for your site, picks a han
 
 > **You:** Yes, check our pricing page.
 
-Claude calls `score_sleepwalker_content` on your pricing URL, reads the gaps, and comes back with specific fixes ranked by impact, plus the run IDs so you can open the full evidence in the Console.
+Claude calls `score_sleepwalker_content` on your pricing URL, reads the gaps, and comes back with specific fixes ranked by impact, plus the run IDs so you can open the full evidence in the app.
 
-That whole exchange is governed: scoped access, prepaid credits, every call audited, and the results saved so your weekly report or your code can read the same data later.
+That whole exchange uses scoped access and prepaid credits. The run is saved, so your weekly report or your code can read the same data later.
 
 ## Make it recurring
 
@@ -81,4 +81,4 @@ Point a scheduled agent at the same tools to get a standing brand-in-AI monitor.
 
 ## Where results live
 
-Anything an agent runs shows up in the Console with full drilldowns, and is readable through the API and CLI. One run, one bill, every surface.
+Anything an agent runs shows up in the app with full drilldowns, and is readable through the API and CLI. One run, every surface.

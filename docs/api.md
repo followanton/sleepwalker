@@ -12,7 +12,7 @@ Authentication:
 Authorization: Bearer sw_api_live_...
 ```
 
-Use API keys from the Sleepwalker Console. Store them in environment variables,
+Use API keys from the Sleepwalker app. Store them in environment variables,
 not in source files.
 
 ## Common Actions

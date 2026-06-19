@@ -1,6 +1,6 @@
 """A tiny, dependency-free Sleepwalker client for Python 3.8+.
 
-Copy it into your project, or run the demo:
+Copy it into your project, or run the example:
     SLEEPWALKER_API_KEY=sw_api_live_... python client.py
 
 It handles auth, errors, run polling, and cursor pagination with the

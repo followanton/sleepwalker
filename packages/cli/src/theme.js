@@ -168,7 +168,7 @@ ${section("Global options")}
   ${theme.info("--version")}       Show version.
 
 ${section("Environment")}
-  ${theme.info("SLEEPWALKER_API_KEY")}       API key from the Sleepwalker Console.
+  ${theme.info("SLEEPWALKER_API_KEY")}       API key from the Sleepwalker app.
   ${theme.info("SLEEPWALKER_API_BASE_URL")}  API base URL. Defaults to https://api.sleepwalker.ai.
 `;
 }

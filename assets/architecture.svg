@@ -16,13 +16,13 @@
   <rect width="1000" height="760" fill="url(#g2)"/>
   <rect x="0.5" y="0.5" width="999" height="759" fill="none" stroke="#222222"/>
 
-  <text x="40" y="48" fill="#8a8a8a" font-size="14" letter-spacing="3">HOW A REQUEST FLOWS</text>
+  <text x="40" y="48" fill="#8a8a8a" font-size="14" letter-spacing="3">SLEEPWALKER ACTION FLOW</text>
 
   <!-- surfaces -->
   <g font-size="18" font-weight="600" text-anchor="middle">
     <g>
       <rect x="60" y="78" width="180" height="58" rx="10" fill="#0c0c0c" stroke="#2a2a2a"/>
-      <text x="150" y="113" fill="#f5f3ef">Console</text>
+      <text x="150" y="113" fill="#f5f3ef">App</text>
     </g>
     <g>
       <rect x="280" y="78" width="180" height="58" rx="10" fill="#0c0c0c" stroke="#2a2a2a"/>
@@ -39,28 +39,28 @@
   </g>
   <text x="500" y="160" text-anchor="middle" fill="#8a8a8a" font-size="14">humans, code, and agents</text>
 
-  <!-- converge to governed actions -->
+  <!-- converge to action layer -->
   <path d="M150 136 V184 H500 V206" fill="none" stroke="#4a4a4a" stroke-width="1.3"/>
   <path d="M370 136 V184" fill="none" stroke="#4a4a4a" stroke-width="1.3"/>
   <path d="M590 136 V184" fill="none" stroke="#4a4a4a" stroke-width="1.3"/>
   <path d="M810 136 V184 H500" fill="none" stroke="#4a4a4a" stroke-width="1.3"/>
   <path d="M500 184 V206" fill="none" stroke="#22c55e" stroke-width="1.6" marker-end="url(#arrow)"/>
 
-  <!-- governed actions bar -->
+  <!-- action layer bar -->
   <rect x="180" y="210" width="640" height="66" rx="12" fill="#0a140d" stroke="#22c55e" stroke-opacity="0.55"/>
-  <text x="500" y="244" text-anchor="middle" fill="#22c55e" font-size="20" font-weight="700">Governed actions</text>
-  <text x="500" y="266" text-anchor="middle" fill="#8a8a8a" font-size="13">one policy gate for every surface</text>
+  <text x="500" y="244" text-anchor="middle" fill="#22c55e" font-size="20" font-weight="700">Sleepwalker actions</text>
+  <text x="500" y="266" text-anchor="middle" fill="#8a8a8a" font-size="13">one request path for every surface</text>
 
   <path d="M500 276 V304" fill="none" stroke="#4a4a4a" stroke-width="1.6" marker-end="url(#arrow)"/>
 
   <!-- controls row -->
   <g font-size="14" text-anchor="middle" fill="#a0a0a0">
     <g><rect x="120" y="308" width="120" height="40" rx="20" fill="#0c0c0c" stroke="#2a2a2a"/><text x="180" y="333">credits</text></g>
-    <g><rect x="252" y="308" width="120" height="40" rx="20" fill="#0c0c0c" stroke="#2a2a2a"/><text x="312" y="333">auth</text></g>
-    <g><rect x="384" y="308" width="132" height="40" rx="20" fill="#0c0c0c" stroke="#2a2a2a"/><text x="450" y="333">scopes</text></g>
-    <g><rect x="528" y="308" width="132" height="40" rx="20" fill="#0c0c0c" stroke="#2a2a2a"/><text x="594" y="333">URL safety</text></g>
-    <g><rect x="672" y="308" width="120" height="40" rx="20" fill="#0c0c0c" stroke="#2a2a2a"/><text x="732" y="333">queueing</text></g>
-    <g><rect x="804" y="308" width="76" height="40" rx="20" fill="#0c0c0c" stroke="#2a2a2a"/><text x="842" y="333">audit</text></g>
+    <g><rect x="252" y="308" width="120" height="40" rx="20" fill="#0c0c0c" stroke="#2a2a2a"/><text x="312" y="333">prompts</text></g>
+    <g><rect x="384" y="308" width="132" height="40" rx="20" fill="#0c0c0c" stroke="#2a2a2a"/><text x="450" y="333">pages</text></g>
+    <g><rect x="528" y="308" width="132" height="40" rx="20" fill="#0c0c0c" stroke="#2a2a2a"/><text x="594" y="333">queue</text></g>
+    <g><rect x="672" y="308" width="120" height="40" rx="20" fill="#0c0c0c" stroke="#2a2a2a"/><text x="732" y="333">results</text></g>
+    <g><rect x="804" y="308" width="76" height="40" rx="20" fill="#0c0c0c" stroke="#2a2a2a"/><text x="842" y="333">logs</text></g>
   </g>
 
   <path d="M500 348 V392" fill="none" stroke="#4a4a4a" stroke-width="1.6" marker-end="url(#arrow)"/>
@@ -95,6 +95,6 @@
   <path d="M250 560 H110 V107 H60" fill="none" stroke="#2a2a2a" stroke-width="1.2" stroke-dasharray="4 4" marker-end="url(#arrow)"/>
   <text x="92" y="340" fill="#6a6a6a" font-size="12" transform="rotate(-90 92 340)">read back anywhere</text>
 
-  <text x="500" y="648" text-anchor="middle" fill="#8a8a8a" font-size="14">Same engine. Every surface. One bill.</text>
+  <text x="500" y="648" text-anchor="middle" fill="#8a8a8a" font-size="14">Same engine. Every surface. One result record.</text>
   <rect x="380" y="676" width="240" height="3" rx="1.5" fill="url(#spine)"/>
 </svg>

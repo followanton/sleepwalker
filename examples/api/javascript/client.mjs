@@ -1,5 +1,5 @@
 // A tiny, dependency-free Sleepwalker client for Node 18+.
-// Copy it into your project, or run the demo at the bottom:
+// Copy it into your project, or run the example at the bottom:
 //   SLEEPWALKER_API_KEY=sw_api_live_... node client.mjs
 //
 // It handles auth, errors, run polling, and cursor pagination so your
@@ -91,7 +91,7 @@ export class SleepwalkerClient {
   }
 }
 
-// Demo
+// Example
 if (import.meta.url === `file://${process.argv[1]}`) {
   const sw = new SleepwalkerClient();
   const run = await sw.createVisibilityRun({

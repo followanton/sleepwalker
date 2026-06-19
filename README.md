@@ -11,26 +11,30 @@
 </p>
 
 <p align="center">
-  <b>AI Visibility and Content Intelligence infrastructure.</b><br>
-  Measure AI visibility. Find content trends and optimization opportunities.<br>
-  From your terminal, your code, or your agents.
+  <b>AI Visibility and Content Intelligence for agents, products, and teams.</b><br>
+  Run AI-search checks, inspect citations, score content, and save every result in one workspace.
 </p>
 
 <p align="center">
+  <a href="https://www.sleepwalker.ai/">Website</a> ·
+  <a href="https://app.sleepwalker.ai">App</a> ·
   <a href="https://www.sleepwalker.ai/docs/">Docs</a> ·
-  <a href="https://app.sleepwalker.ai">Console</a> ·
-  <a href="docs/agents.md">Agents</a> ·
-  <a href="docs/cookbook.md">Cookbook</a> ·
-  <a href="examples/">Examples</a>
+  <a href="https://www.sleepwalker.ai/docs/mcp/">MCP</a> ·
+  <a href="https://www.sleepwalker.ai/docs/api/">API</a> ·
+  <a href="https://www.sleepwalker.ai/docs/cli/">CLI</a> ·
+  <a href="docs/cookbook.md">Cookbook</a>
 </p>
 
 ---
 
-Sleepwalker does two things. It **measures AI visibility**: it runs the prompts your audience actually asks AI, captures every answer and citation, and tells you whether your brand shows up. And it gives you **Content Intelligence**: it finds the content trends in your category and the optimization opportunities on your pages, with specific fixes. You drive all of it from the Console, the API, MCP, or the CLI.
+Sleepwalker helps teams understand how AI systems talk about a brand and what content needs to change. It combines two connected workflows:
 
-Same engine. Same governed actions. One credit ledger.
+- **AI Visibility** — run prompts across ChatGPT, Perplexity, Grok, and Gemini; capture full answers, citations, competitors, and mention types.
+- **Content Intelligence** — serialize public pages, discover demand, score content depth and freshness, and return practical recommendations.
 
-This repository is the public developer surface: the CLI, runnable examples, agent setups, and short guides. It does not contain the hosted engine or any secrets. See [What is in this repo](#what-is-in-this-repo).
+You can run the same work from the hosted app, the public API, MCP clients, or the CLI. Results stay connected, so a run started by an agent can be reviewed later in the app or queried from code.
+
+This repository is the public developer surface for Sleepwalker: CLI package, API examples, MCP setup notes, and short guides. The hosted engine, app source, database schema, provider integrations, and billing systems are private.
 
 ## Quickstart
 
@@ -45,7 +49,7 @@ Or run one command without installing:
 npx -y @sleepwalkerai/cli doctor
 ```
 
-Add a key from the [Console](https://app.sleepwalker.ai) (API tab), then run your first check:
+Create an API key in the [Sleepwalker app](https://app.sleepwalker.ai), then run your first visibility check:
 
 ```bash
 sleepwalker auth key set sw_api_live_...
@@ -61,29 +65,31 @@ sleepwalker visibility run https://yourbrand.com \
   <img src="assets/terminal.svg" alt="Sleepwalker CLI running an AI Visibility check" width="92%">
 </p>
 
-Reads are normally unmetered. You only spend credits on actions that do real work, and the CLI always tells you what a run cost and what to run next.
-
-## What you can measure
+## What You Can Build
 
 <p align="center">
   <img src="assets/visibility.svg" alt="Sample AI Visibility result across platforms" width="92%">
 </p>
 
-- **AI Visibility.** Send real prompts to ChatGPT, Perplexity, Grok, and Gemini. See whether your brand appears in the answer and the citations, who appears instead, and how that moves over time.
-- **Content Intelligence.** Score a page against live AI-search demand, find the gaps, and get concrete recommendations back.
-- **Serialization.** Turn any public URL into clean, normalized content that an agent or a pipeline can read.
+- **Brand monitoring**: schedule the same prompts and watch mentions, citations, and competitors move over time.
+- **Agent workflows**: let MCP-capable clients serialize pages, launch checks, score content, and read results back.
+- **Product integrations**: use the API from internal tools, client portals, reporting pipelines, or automated QA checks.
+- **Content review**: inspect what a page says, which trends it misses, and what should be fixed first.
 
-## How it works
+## Access Paths
 
-Everything Sleepwalker does is a small, governed action. Your agent can call it, your code can call it, and you can click it in the Console. Same auth, same limits, same results, and every run is saved once and readable from any surface.
+| Surface | Best for | Entry point |
+|---|---|---|
+| App | Human review, credits, keys, and full result views | [app.sleepwalker.ai](https://app.sleepwalker.ai) |
+| API | Scripts, products, scheduled jobs, and reporting workflows | [API docs](https://www.sleepwalker.ai/docs/api/) |
+| MCP | Claude and other MCP-capable agents | [MCP setup](https://www.sleepwalker.ai/docs/mcp/) |
+| CLI | Terminal workflows and automation | [CLI docs](https://www.sleepwalker.ai/docs/cli/) |
 
 <p align="center">
-  <img src="assets/architecture.svg" alt="Sleepwalker architecture: surfaces, governed actions, engine, results" width="62%">
+  <img src="assets/architecture.svg" alt="Sleepwalker action flow across app, API, MCP, and CLI" width="68%">
 </p>
 
-## Use it from anywhere
-
-Start the same visibility run four ways.
+## Run It From Anywhere
 
 **CLI**
 
@@ -109,49 +115,46 @@ curl -s https://api.sleepwalker.ai/v1/visibility/runs \
   }'
 ```
 
-**MCP** (Claude and other MCP clients)
+**MCP**
 
+```text
+https://mcp.sleepwalker.ai/mcp
 ```
-Connect once:  https://mcp.sleepwalker.ai/mcp
-Then ask:      "Check how YourBrand shows up across AI search this week."
-```
 
-**Console**: [app.sleepwalker.ai](https://app.sleepwalker.ai) for the visual version.
+Ask an MCP-capable client: `Check how YourBrand appears across AI search this week.`
 
-Full examples in [`examples/`](examples/). A typed client helper for [JavaScript](examples/api/javascript/client.mjs) and [Python](examples/api/python/client.py) handles polling and pagination for you.
+**App**
 
-## Built for agents
+Open [app.sleepwalker.ai](https://app.sleepwalker.ai) for the visual workflow, saved results, credits, and keys.
 
-The difference: Sleepwalker is not a dashboard with an API bolted on. It is agent-native. Connect it to Claude or any MCP client and your agent can serialize pages, run visibility checks, score content, and read results back, all through governed tools with prepaid credits and a full audit trail.
-
-See **[docs/agents.md](docs/agents.md)** for the tool catalog and a real "ask Claude to watch my brand" walkthrough.
-
-## Examples
+## Developer Resources
 
 | Path | What it shows |
 |---|---|
-| [`examples/api/curl`](examples/api/curl) | One-call examples for every action |
-| [`examples/api/javascript`](examples/api/javascript) | Raw `fetch` plus a zero-dependency client |
-| [`examples/api/python`](examples/api/python) | Raw `urllib` plus a small client class |
-| [`examples/mcp`](examples/mcp) | OAuth and bearer-token setup for MCP clients |
-| [`docs/cookbook.md`](docs/cookbook.md) | End-to-end recipes, including a CI check |
+| [`docs/agents.md`](docs/agents.md) | MCP tool catalog and agent workflow walkthrough |
+| [`docs/concepts.md`](docs/concepts.md) | Runs, probes, serialization, scoring, credits |
+| [`docs/cookbook.md`](docs/cookbook.md) | Runnable workflows, including CI checks |
+| [`examples/api/curl`](examples/api/curl) | One-call examples for public API actions |
+| [`examples/api/javascript`](examples/api/javascript) | Raw `fetch` plus a zero-dependency client helper |
+| [`examples/api/python`](examples/api/python) | `urllib` examples plus a small client class |
+| [`examples/mcp`](examples/mcp) | OAuth and bearer-token setup notes |
 
 ## Credits
 
-Pay as you go. No subscriptions, no seats. Reads, lists, and status polling are free. Billable actions (visibility runs, content scoring, serialization) use prepaid credits and behave the same across Console, API, MCP, and CLI. New verified accounts start with a small credit balance to try things. Details in [docs/credits.md](docs/credits.md).
+Sleepwalker is pay as you go. Reads, lists, and status polling are normally unmetered. Actions that run work, such as visibility checks, content scoring, and serialization, use prepaid credits. Details live in [docs/credits.md](docs/credits.md) and the hosted [billing docs](https://www.sleepwalker.ai/docs/billing/credits/).
 
-## What is in this repo
+## Repository Boundary
 
-This is client tooling and documentation, nothing more.
+This repository is intentionally small.
 
-| In this repo | Stays private |
+| Public here | Private in Sleepwalker |
 |---|---|
-| CLI, examples, agent setups, docs | Hosted engine and Console source |
+| CLI, examples, setup notes, short docs | Hosted engine and app source |
 | Public API request shapes | MCP server implementation |
-| MCP client connection guides | Database schema and billing internals |
-| Credit model, in plain terms | Provider integrations and routing |
+| MCP client connection examples | Database schema and billing internals |
+| Product-level credit behavior | Provider integrations and routing |
 
-Do not put secrets here. Keys belong in environment variables:
+Do not commit real keys. Use environment variables or the CLI key store:
 
 ```bash
 export SLEEPWALKER_API_KEY=sw_api_live_...
@@ -159,8 +162,10 @@ export SLEEPWALKER_API_KEY=sw_api_live_...
 
 ## Links
 
-- Console: [app.sleepwalker.ai](https://app.sleepwalker.ai)
+- Website: [sleepwalker.ai](https://www.sleepwalker.ai/)
+- App: [app.sleepwalker.ai](https://app.sleepwalker.ai)
 - Docs: [sleepwalker.ai/docs](https://www.sleepwalker.ai/docs/)
+- npm: [@sleepwalkerai/cli](https://www.npmjs.com/package/@sleepwalkerai/cli)
 - Security policy: [SECURITY.md](SECURITY.md)
 - Contributing: [CONTRIBUTING.md](CONTRIBUTING.md)
 - License: [MIT](LICENSE)

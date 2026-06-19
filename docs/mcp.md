@@ -25,7 +25,7 @@ available.
 
 ## Bearer Token
 
-For custom or local clients, create a bearer token in the Sleepwalker Console
+For custom or local clients, create a bearer token in the Sleepwalker app
 and pass it as:
 
 ```http

@@ -35,7 +35,7 @@ sleepwalker visibility run https://competitor.com \
   --watch --json > competitor.json
 ```
 
-Both runs land in the Console with full evidence: the exact answers, the citations, and the mention type for each platform. The `--json` files give you the raw numbers to diff or chart however you like.
+Both runs land in the Sleepwalker app with full evidence: the exact answers, the citations, and the mention type for each platform. The `--json` files give you the raw numbers to diff or chart however you like.
 
 ---
 

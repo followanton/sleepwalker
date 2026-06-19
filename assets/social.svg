@@ -24,7 +24,7 @@
   <circle cx="1120" cy="540" r="460" fill="url(#sg2)"/>
   <rect x="6" y="6" width="1268" height="628" rx="20" fill="none" stroke="#222222"/>
 
-  <text x="64" y="88" fill="#8a8a8a" font-size="16" letter-spacing="4">V1 · PUBLIC BETA</text>
+  <text x="64" y="88" fill="#8a8a8a" font-size="16" letter-spacing="4">DEVELOPER TOOLS</text>
   <text x="1216" y="88" text-anchor="end" fill="#8a8a8a" font-size="16" letter-spacing="2">pay as you go</text>
 
   <!-- real brand lockup, centered -->
@@ -48,12 +48,12 @@
   </g>
 
   <!-- positioning -->
-  <text x="640" y="372" text-anchor="middle" fill="#f5f3ef" font-size="36" font-weight="700">AI Visibility and Content Intelligence infrastructure</text>
-  <text x="640" y="414" text-anchor="middle" fill="#a0a0a0" font-size="22">Measure AI visibility. Find content trends and optimization opportunities.</text>
+  <text x="640" y="372" text-anchor="middle" fill="#f5f3ef" font-size="36" font-weight="700">AI Visibility and Content Intelligence</text>
+  <text x="640" y="414" text-anchor="middle" fill="#a0a0a0" font-size="22">Run prompts, inspect citations, score pages, and save every result.</text>
 
   <!-- surface chips -->
   <g font-size="20" font-weight="600" text-anchor="middle">
-    <g><rect x="389" y="456" width="150" height="54" rx="12" fill="#0c0c0c" stroke="#2a2a2a"/><text x="464" y="491" fill="#f5f3ef">Console</text></g>
+    <g><rect x="389" y="456" width="150" height="54" rx="12" fill="#0c0c0c" stroke="#2a2a2a"/><text x="464" y="491" fill="#f5f3ef">App</text></g>
     <g><rect x="555" y="456" width="116" height="54" rx="12" fill="#0c0c0c" stroke="#2a2a2a"/><text x="613" y="491" fill="#f5f3ef">API</text></g>
     <g><rect x="687" y="456" width="116" height="54" rx="12" fill="#0c0c0c" stroke="#2a2a2a"/><text x="745" y="491" fill="#f5f3ef">MCP</text></g>
     <g><rect x="819" y="456" width="116" height="54" rx="12" fill="#0c0c0c" stroke="#2a2a2a"/><text x="877" y="491" fill="#f5f3ef">CLI</text></g>

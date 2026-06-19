@@ -2,27 +2,27 @@
 
 ## 1. Create A Sleepwalker Account
 
-Create an account in the hosted Console:
+Create an account in the hosted app:
 
 ```text
 https://app.sleepwalker.ai
 ```
 
-The Console is where you manage credits, API keys, MCP access, and saved
+The app is where you manage credits, API keys, MCP access, and saved
 results.
 
 ## 2. Choose An Access Path
 
 | Path | Use when |
 |---|---|
-| Console | You want visual reports and human review. |
+| App | You want visual reports and human review. |
 | API | You want scripts, product integrations, or scheduled jobs. |
 | MCP | You want an agent or MCP client to run Sleepwalker actions. |
 | CLI | You want terminal workflows. |
 
 ## 3. Create An API Key
 
-Open the Console, go to API, and create a key.
+Open the Sleepwalker app, go to API, and create a key.
 
 Use it from your shell:
 

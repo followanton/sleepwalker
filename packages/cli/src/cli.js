@@ -699,7 +699,7 @@ async function handleDoctor(flags, io) {
         "sleepwalker reports by-url https://www.sleepwalker.ai",
         "sleepwalker commands",
       ], theme);
-      io.stdout.write(`\n${theme.muted("If an action fails with a scope error, generate a new key in Console > API.")}\n`);
+      io.stdout.write(`\n${theme.muted("If an action fails with a scope error, generate a new key in the Sleepwalker app > API.")}\n`);
     }
   });
 
@@ -739,7 +739,7 @@ async function handleAuth(args, flags, io) {
     return;
   }
   if (subcommand === "login") {
-    io.stdout.write("Create an API key in the Sleepwalker Console, then run:\n\n");
+    io.stdout.write("Create an API key in the Sleepwalker app, then run:\n\n");
     io.stdout.write(`  ${theme.command("sleepwalker auth key set sw_api_live_...")}\n\n`);
     io.stdout.write(`${theme.muted("OAuth/device login is not part of this first CLI scaffold.")}\n`);
     return;

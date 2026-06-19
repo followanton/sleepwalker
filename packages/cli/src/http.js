@@ -67,7 +67,7 @@ export function createApiClient({ env = process.env, fetchImpl = globalThis.fetc
           ? detail.error
           : `Sleepwalker API returned HTTP ${response.status}`;
       if (message === "API key is missing required scope") {
-        message = "This API key cannot run the requested action. Create a new key in Sleepwalker Console > API; new keys include the full API action surface.";
+        message = "This API key cannot run the requested action. Create a new key in the Sleepwalker app > API; new keys include the full API action surface.";
       }
       throw new SleepwalkerApiError(message, { status: response.status, payload });
     }
