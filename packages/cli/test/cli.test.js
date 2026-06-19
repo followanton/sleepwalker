@@ -492,7 +492,7 @@ test("accepts --url for action commands", async () => {
 });
 
 test("page serialize summarizes human output and preserves JSON payload", async () => {
-  const dangerousContent = "## Page: Example\u001b]52;c;Y2xpcGJvYXJk\u0007\n\nUseful\u001b[2J content for agents.";
+  const dangerousContent = "## Page: Example\u001b]52;c;Y2xpcGJvYXJk\u0007\n\nUseful\u001b[2J content\r\u202E for agents.";
   const body = {
     serialization: {
       url: "https://example.com",
@@ -512,8 +512,8 @@ test("page serialize summarizes human output and preserves JSON payload", async 
   await runCli(["page", "serialize", "https://example.com"], human.io);
   assert.match(human.stdout(), /Page serialized/);
   assert.match(human.stdout(), /Preview/);
-  assert.match(human.stdout(), /Useful\[2J content/);
-  assert.doesNotMatch(human.stdout(), /\u001b|\u0007/);
+  assert.match(human.stdout(), /Useful\[2J content for agents/);
+  assert.doesNotMatch(human.stdout(), /\u001b|\u0007|\r|\u202E/);
   assert.match(human.stdout(), /sleepwalker page serialize 'https:\/\/example\.com' --json/);
 
   const json = memoryIo({

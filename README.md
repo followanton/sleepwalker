@@ -16,7 +16,7 @@ are not part of this repository.
 ```text
 sleepwalker/
   packages/
-    cli/                 Sleepwalker CLI developer preview
+    cli/                 Sleepwalker CLI
   examples/
     api/                 curl, JavaScript, and Python examples
     mcp/                 OAuth and bearer-token setup examples
@@ -39,9 +39,25 @@ Public docs:
 - [CLI docs](https://www.sleepwalker.ai/docs/cli/)
 - [Billing and credits](https://www.sleepwalker.ai/docs/billing/credits/)
 
-## CLI Developer Preview
+## CLI
 
-The CLI is currently included as a developer preview in `packages/cli`.
+Install the CLI from npm:
+
+```bash
+npm install -g @sleepwalkerai/cli
+sleepwalker init
+sleepwalker auth key set sw_api_live_...
+sleepwalker doctor
+sleepwalker menu
+```
+
+Or run one command without installing:
+
+```bash
+npx @sleepwalkerai/cli doctor
+```
+
+To work from this repository:
 
 ```bash
 git clone https://github.com/followanton/sleepwalker.git
@@ -58,9 +74,6 @@ node ./bin/sleepwalker.js auth key set sw_api_live_...
 node ./bin/sleepwalker.js doctor
 node ./bin/sleepwalker.js menu
 ```
-
-The intended public npm package name is `@sleepwalkerai/cli`. Until the npm
-package is published, use the repository checkout flow above.
 
 ## API Quick Example
 

@@ -1,18 +1,33 @@
 # Sleepwalker CLI
 
-Developer-preview command-line client for the Sleepwalker API.
+Command-line client for the Sleepwalker API.
 
 This package is intentionally a thin API client. It does not run Sleepwalker
 analysis locally.
 
-Provisional public package target:
+Public package:
 
 ```text
 @sleepwalkerai/cli
 ```
 
-The package remains private until the npm scope and release process are
-finalized. Use the local checkout flow below during the developer preview.
+Install it from npm or run it directly with `npx`.
+
+## Install
+
+```bash
+npm install -g @sleepwalkerai/cli
+sleepwalker init
+sleepwalker auth key set sw_api_live_...
+sleepwalker menu
+sleepwalker doctor
+```
+
+One-off usage:
+
+```bash
+npx @sleepwalkerai/cli doctor
+```
 
 ## Local Usage
 
@@ -25,9 +40,6 @@ node ./bin/sleepwalker.js menu
 node ./bin/sleepwalker.js init
 node ./bin/sleepwalker.js commands
 ```
-
-The npm install and `npx` flow will be documented after the package is
-published under the final package name.
 
 With an API key:
 

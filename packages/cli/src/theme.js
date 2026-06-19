@@ -39,7 +39,7 @@ function wrap(enabled, code, value) {
 }
 
 export function sanitizeTerminalText(value) {
-  return String(value ?? "").replace(/[\x00-\x08\x0B\x0C\x0E-\x1F\x7F-\x9F]/g, "");
+  return String(value ?? "").replace(/[\x00-\x08\x0B-\x1F\x7F-\x9F\u061C\u200E\u200F\u202A-\u202E\u2066-\u2069]/g, "");
 }
 
 export function createTheme({ env = process.env, stdout = process.stdout } = {}) {
@@ -88,7 +88,7 @@ export function renderWelcome(theme, options = {}) {
   const section = (value) => theme.accent(value);
   const muted = (value) => theme.muted(value);
   return `${theme.accent(WORDMARK)}
-${theme.accent("Sleepwalker")} ${theme.ci("CLI")} ${theme.muted("developer preview")}
+${theme.accent("Sleepwalker")} ${theme.ci("CLI")} ${theme.muted("command line")}
 ${theme.muted("AI Visibility | Content Intelligence | MCP | API | CLI")}
 
 ${section("Start here")}
