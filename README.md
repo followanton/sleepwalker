@@ -29,8 +29,8 @@
 
 Sleepwalker helps teams understand how AI systems talk about a brand and what content needs to change. It combines two connected workflows:
 
-- **AI Visibility** — run prompts across ChatGPT, Perplexity, Grok, and Gemini; capture full answers, citations, competitors, and mention types.
-- **Content Intelligence** — serialize public pages, discover demand, score content depth and freshness, and return practical recommendations.
+- **AI Visibility** - run prompts across ChatGPT, Perplexity, Grok, and Gemini; capture full answers, citations, competitors, and mention types.
+- **Content Intelligence** - serialize public pages, discover demand, score content depth and freshness, and return practical recommendations.
 
 You can run the same work from the hosted app, the public API, MCP clients, or the CLI. Results stay connected, so a run started by an agent can be reviewed later in the app or queried from code.
 
@@ -71,10 +71,11 @@ sleepwalker visibility run https://yourbrand.com \
   <img src="assets/visibility.svg" alt="Sample AI Visibility result across platforms" width="92%">
 </p>
 
-- **Brand monitoring**: schedule the same prompts and watch mentions, citations, and competitors move over time.
-- **Agent workflows**: let MCP-capable clients serialize pages, launch checks, score content, and read results back.
+- **AI Search (GEO) monitoring**: Setup prompt tracking against specific URLs across ChatGPT, Perplexity, Grok and Gemini.
+- **Agent workflows**: let MCP-capable clients (such as Claude) get access to vast Sleepwalker data, featuring LLM answers, cited domains, competitor performance, content trends and much more.
 - **Product integrations**: use the API from internal tools, client portals, reporting pipelines, or automated QA checks.
-- **Content review**: inspect what a page says, which trends it misses, and what should be fixed first.
+- **In-depth content review**: inspect what a page says, which trends it misses, and what should be fixed first.
+- **Mix and match Sleepwalker capabilities**: Create custom skills and workflows involving other MCPs to match your business requirements.
 
 ## Access Paths
 
