@@ -33,20 +33,17 @@ export SLEEPWALKER_API_KEY=sw_api_live_...
 ## 4. Try The CLI
 
 ```bash
-git clone https://github.com/followanton/sleepwalker.git
-cd sleepwalker/packages/cli
-npm ci
-node ./bin/sleepwalker.js doctor
-node ./bin/sleepwalker.js menu
+npm install -g @sleepwalkerai/cli
+sleepwalker init
+sleepwalker auth key set sw_api_live_...
+sleepwalker doctor
+sleepwalker menu
 ```
 
-If you already have the repository locally:
+Or run one command without installing:
 
 ```bash
-cd packages/cli
-npm ci
-node ./bin/sleepwalker.js doctor
-node ./bin/sleepwalker.js menu
+npx -y @sleepwalkerai/cli doctor
 ```
 
 ## 5. Try The API

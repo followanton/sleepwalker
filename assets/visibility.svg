@@ -1,0 +1,69 @@
+<svg viewBox="0 0 1000 540" xmlns="http://www.w3.org/2000/svg" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace">
+  <rect width="1000" height="540" fill="#000000"/>
+  <rect x="0.5" y="0.5" width="999" height="539" fill="none" stroke="#222222"/>
+
+  <!-- header -->
+  <text x="40" y="56" fill="#f5f3ef" font-size="22" font-weight="700">AI Visibility</text>
+  <text x="40" y="80" fill="#8a8a8a" font-size="13.5">share of AI answers that mention your brand, last run</text>
+
+  <text x="960" y="50" text-anchor="end" fill="#22c55e" font-size="40" font-weight="700">72%</text>
+  <text x="960" y="74" text-anchor="end" fill="#8a8a8a" font-size="12.5">overall mention rate</text>
+
+  <line x1="40" y1="100" x2="960" y2="100" stroke="#222222"/>
+
+  <!-- gridlines -->
+  <g stroke="#1a1a1a">
+    <line x1="220" y1="120" x2="220" y2="470"/>
+    <line x1="400" y1="120" x2="400" y2="470"/>
+    <line x1="580" y1="120" x2="580" y2="470"/>
+    <line x1="760" y1="120" x2="760" y2="470"/>
+    <line x1="940" y1="120" x2="940" y2="470"/>
+  </g>
+  <g fill="#6a6a6a" font-size="11.5" text-anchor="middle">
+    <text x="220" y="492">0</text>
+    <text x="400" y="492">25</text>
+    <text x="580" y="492">50</text>
+    <text x="760" y="492">75</text>
+    <text x="940" y="492">100%</text>
+  </g>
+
+  <!-- rows: platform label, brand bar (green), competitor bar (purple) -->
+  <g font-size="14" fill="#a0a0a0">
+    <!-- Perplexity -->
+    <text x="44" y="156" fill="#f5f3ef">Perplexity</text>
+    <rect x="220" y="142" width="583" height="20" rx="4" fill="#22c55e"/>
+    <text x="811" y="157" fill="#22c55e" font-size="12.5">81</text>
+    <rect x="220" y="166" width="461" height="14" rx="3" fill="#a78bfa" fill-opacity="0.55"/>
+    <text x="689" y="177" fill="#8a8a8a" font-size="11">64</text>
+
+    <!-- ChatGPT -->
+    <text x="44" y="246" fill="#f5f3ef">ChatGPT</text>
+    <rect x="220" y="232" width="547" height="20" rx="4" fill="#22c55e"/>
+    <text x="775" y="247" fill="#22c55e" font-size="12.5">76</text>
+    <rect x="220" y="256" width="418" height="14" rx="3" fill="#a78bfa" fill-opacity="0.55"/>
+    <text x="646" y="267" fill="#8a8a8a" font-size="11">58</text>
+
+    <!-- Grok -->
+    <text x="44" y="336" fill="#f5f3ef">Grok</text>
+    <rect x="220" y="322" width="454" height="20" rx="4" fill="#22c55e"/>
+    <text x="682" y="337" fill="#22c55e" font-size="12.5">63</text>
+    <rect x="220" y="346" width="511" height="14" rx="3" fill="#a78bfa" fill-opacity="0.55"/>
+    <text x="739" y="357" fill="#8a8a8a" font-size="11">71</text>
+
+    <!-- Gemini -->
+    <text x="44" y="426" fill="#f5f3ef">Gemini</text>
+    <rect x="220" y="412" width="490" height="20" rx="4" fill="#22c55e"/>
+    <text x="718" y="427" fill="#22c55e" font-size="12.5">68</text>
+    <rect x="220" y="436" width="374" height="14" rx="3" fill="#a78bfa" fill-opacity="0.55"/>
+    <text x="602" y="447" fill="#8a8a8a" font-size="11">52</text>
+  </g>
+
+  <!-- legend -->
+  <g font-size="13">
+    <rect x="40" y="510" width="14" height="14" rx="3" fill="#22c55e"/>
+    <text x="62" y="522" fill="#a0a0a0">YourBrand</text>
+    <rect x="180" y="511" width="14" height="12" rx="3" fill="#a78bfa" fill-opacity="0.55"/>
+    <text x="202" y="522" fill="#a0a0a0">Competitor</text>
+    <text x="960" y="522" text-anchor="end" fill="#6a6a6a">illustrative sample · your numbers will differ</text>
+  </g>
+</svg>

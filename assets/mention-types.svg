@@ -1,0 +1,43 @@
+<svg viewBox="0 0 1000 320" xmlns="http://www.w3.org/2000/svg" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace">
+  <rect width="1000" height="320" fill="#000000"/>
+  <rect x="0.5" y="0.5" width="999" height="319" fill="none" stroke="#222222"/>
+
+  <text x="40" y="50" fill="#f5f3ef" font-size="22" font-weight="700">Where you get mentioned</text>
+  <text x="40" y="74" fill="#8a8a8a" font-size="13.5">not all mentions are equal. A citation carries more weight than a passing note.</text>
+
+  <!-- stacked bar -->
+  <g>
+    <rect x="40" y="110" width="441.6" height="56" rx="6" fill="#22c55e"/>
+    <rect x="485.6" y="110" width="285.2" height="56" rx="6" fill="#60a5fa"/>
+    <rect x="774.8" y="110" width="110.4" height="56" rx="6" fill="#a78bfa"/>
+    <rect x="889.2" y="110" width="70.8" height="56" rx="6" fill="#475569"/>
+  </g>
+  <g fill="#04140a" font-size="15" font-weight="700" text-anchor="middle">
+    <text x="260" y="144">48%</text>
+  </g>
+  <g fill="#04101c" font-size="15" font-weight="700" text-anchor="middle">
+    <text x="628" y="144">31%</text>
+  </g>
+  <text x="830" y="144" fill="#0c0918" font-size="14" font-weight="700" text-anchor="middle">12%</text>
+
+  <!-- legend -->
+  <g font-size="14">
+    <rect x="40" y="210" width="14" height="14" rx="3" fill="#22c55e"/>
+    <text x="62" y="222" fill="#f5f3ef">In the answer</text>
+    <text x="62" y="244" fill="#6a6a6a" font-size="12">named in the body</text>
+
+    <rect x="270" y="210" width="14" height="14" rx="3" fill="#60a5fa"/>
+    <text x="292" y="222" fill="#f5f3ef">In citations</text>
+    <text x="292" y="244" fill="#6a6a6a" font-size="12">a cited source</text>
+
+    <rect x="500" y="210" width="14" height="14" rx="3" fill="#a78bfa"/>
+    <text x="522" y="222" fill="#f5f3ef">Exact URL</text>
+    <text x="522" y="244" fill="#6a6a6a" font-size="12">your page linked</text>
+
+    <rect x="730" y="210" width="14" height="14" rx="3" fill="#475569"/>
+    <text x="752" y="222" fill="#f5f3ef">Domain only</text>
+    <text x="752" y="244" fill="#6a6a6a" font-size="12">site cited, not the page</text>
+  </g>
+
+  <text x="40" y="294" fill="#6a6a6a" font-size="12.5">Sleepwalker classifies every mention so you can chase citations, not just noise.</text>
+</svg>

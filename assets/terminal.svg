@@ -1,0 +1,42 @@
+<svg viewBox="0 0 1000 620" xmlns="http://www.w3.org/2000/svg" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace">
+  <rect width="1000" height="620" rx="14" fill="#070707"/>
+  <rect x="0.5" y="0.5" width="999" height="619" rx="14" fill="none" stroke="#222222"/>
+
+  <!-- title bar -->
+  <rect x="1" y="1" width="998" height="46" rx="14" fill="#0d0d0d"/>
+  <rect x="1" y="30" width="998" height="17" fill="#0d0d0d"/>
+  <circle cx="32" cy="24" r="6" fill="#ef4444" fill-opacity="0.8"/>
+  <circle cx="54" cy="24" r="6" fill="#f59e0b" fill-opacity="0.85"/>
+  <circle cx="76" cy="24" r="6" fill="#22c55e" fill-opacity="0.9"/>
+  <text x="500" y="29" text-anchor="middle" fill="#8a8a8a" font-size="13">sleepwalker · zsh</text>
+  <line x1="1" y1="47" x2="999" y2="47" stroke="#1c1c1c"/>
+
+  <g font-size="15">
+    <!-- command -->
+    <text x="36" y="90"><tspan fill="#22c55e">$</tspan> <tspan fill="#f5f3ef">sleepwalker visibility run https://yourbrand.com \</tspan></text>
+    <text x="36" y="116" fill="#f5f3ef">    --brand YourBrand \</text>
+    <text x="36" y="142" fill="#f5f3ef">    --prompt "best ai visibility platform 2026" \</text>
+    <text x="36" y="168" fill="#f5f3ef">    --platform perplexity,openai,grok,gemini --watch</text>
+
+    <!-- live transitions -->
+    <text x="36" y="210"><tspan fill="#8a8a8a">Visibility</tspan> <tspan fill="#94a3b8">run</tspan> <tspan fill="#22d3ee">vis_2f81c4</tspan> <tspan fill="#94a3b8">is</tspan> <tspan fill="#f59e0b">queued</tspan></text>
+    <text x="36" y="236"><tspan fill="#8a8a8a">Visibility</tspan> <tspan fill="#94a3b8">run</tspan> <tspan fill="#22d3ee">vis_2f81c4</tspan> <tspan fill="#94a3b8">is</tspan> <tspan fill="#f59e0b">running</tspan></text>
+    <text x="36" y="262"><tspan fill="#8a8a8a">Visibility</tspan> <tspan fill="#94a3b8">run</tspan> <tspan fill="#22d3ee">vis_2f81c4</tspan> <tspan fill="#94a3b8">is</tspan> <tspan fill="#22c55e">completed</tspan></text>
+
+    <!-- summary -->
+    <text x="36" y="304" fill="#22c55e" font-weight="700">AI Visibility</text>
+    <text x="36" y="334"><tspan fill="#8a8a8a">Run ID    </tspan> <tspan fill="#22d3ee">vis_2f81c4</tspan></text>
+    <text x="36" y="360"><tspan fill="#8a8a8a">Status    </tspan> <tspan fill="#22c55e">completed</tspan></text>
+    <text x="36" y="386"><tspan fill="#8a8a8a">URL       </tspan> <tspan fill="#60a5fa">https://yourbrand.com</tspan></text>
+    <text x="36" y="412"><tspan fill="#8a8a8a">Target    </tspan> <tspan fill="#f5f3ef">YourBrand</tspan></text>
+    <text x="36" y="438"><tspan fill="#8a8a8a">Platforms </tspan> <tspan fill="#f5f3ef">perplexity, openai, grok, gemini</tspan></text>
+    <text x="36" y="464"><tspan fill="#8a8a8a">Prompts   </tspan> <tspan fill="#f5f3ef">1</tspan></text>
+    <text x="36" y="490"><tspan fill="#8a8a8a">Probes    </tspan> <tspan fill="#f5f3ef">4</tspan></text>
+    <text x="36" y="516"><tspan fill="#8a8a8a">Settled credits </tspan> <tspan fill="#22c55e">4.00</tspan></text>
+
+    <!-- next -->
+    <text x="36" y="558" fill="#22c55e">Next</text>
+    <text x="36" y="584" fill="#a78bfa">  sleepwalker visibility status vis_2f81c4 --results</text>
+    <text x="36" y="610"><tspan fill="#22c55e">$</tspan> <tspan fill="#f5f3ef">▏</tspan></text>
+  </g>
+</svg>
