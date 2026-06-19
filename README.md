@@ -65,6 +65,8 @@ sleepwalker visibility run https://yourbrand.com \
   <img src="assets/terminal.svg" alt="Sleepwalker CLI running an AI Visibility check" width="92%">
 </p>
 
+Want to see the shape of the data first? Open [`docs/responses.md`](docs/responses.md) for full example outputs from serialization, prompt suggestions, AI Visibility, Content Intelligence, and report lookup.
+
 ## What You Can Build
 
 <p align="center">
@@ -135,6 +137,7 @@ Open [app.sleepwalker.ai](https://app.sleepwalker.ai) for the visual workflow, s
 | [`docs/agents.md`](docs/agents.md) | MCP tool catalog and agent workflow walkthrough |
 | [`docs/concepts.md`](docs/concepts.md) | Runs, probes, serialization, scoring, credits |
 | [`docs/cookbook.md`](docs/cookbook.md) | Runnable workflows, including CI checks |
+| [`docs/responses.md`](docs/responses.md) | Full example outputs for the main Sleepwalker actions |
 | [`examples/api/curl`](examples/api/curl) | One-call examples for public API actions |
 | [`examples/api/javascript`](examples/api/javascript) | Raw `fetch` plus a zero-dependency client helper |
 | [`examples/api/python`](examples/api/python) | `urllib` examples plus a small client class |

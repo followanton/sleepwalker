@@ -1,0 +1,32 @@
+{
+  "url": "https://docs.npmjs.com/",
+  "reports": [
+    {
+      "type": "ai_visibility",
+      "run_id": "vis_01jzexample8r7n9npm",
+      "status": "completed",
+      "created_at": "2026-06-19T12:45:20Z",
+      "target_entity": "npm",
+      "summary": {
+        "probe_count": 4,
+        "mention_rate": 1,
+        "citation_rate": 0.75,
+        "top_platforms": [
+          "perplexity",
+          "openai"
+        ]
+      }
+    },
+    {
+      "type": "content_intelligence",
+      "run_id": "ci_01jzexample7q6docs",
+      "status": "completed",
+      "created_at": "2026-06-19T13:10:11Z",
+      "summary": {
+        "score": 82,
+        "band": "Good",
+        "top_recommendation": "Create a visible secure publishing journey"
+      }
+    }
+  ]
+}

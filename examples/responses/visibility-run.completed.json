@@ -1,0 +1,125 @@
+{
+  "run_id": "vis_01jzexample8r7n9npm",
+  "status": "completed",
+  "source": "cli",
+  "url": "https://docs.npmjs.com/",
+  "target_entity": "npm",
+  "created_at": "2026-06-19T12:45:20Z",
+  "completed_at": "2026-06-19T12:46:04Z",
+  "summary": {
+    "prompt_count": 2,
+    "platform_count": 2,
+    "probe_count": 4,
+    "completed_probe_count": 4,
+    "brand_mentions": 4,
+    "citation_mentions": 3,
+    "mention_rate": 1,
+    "citation_rate": 0.75,
+    "competitors": [
+      {
+        "name": "Yarn",
+        "mentions": 3
+      },
+      {
+        "name": "pnpm",
+        "mentions": 3
+      },
+      {
+        "name": "Bun",
+        "mentions": 1
+      }
+    ],
+    "cited_domains": [
+      {
+        "domain": "docs.npmjs.com",
+        "count": 3
+      },
+      {
+        "domain": "nodejs.org",
+        "count": 1
+      }
+    ]
+  },
+  "probes": [
+    {
+      "probe_id": "probe_01jzexample001",
+      "prompt": "What is the best package manager for JavaScript projects?",
+      "platform": "perplexity",
+      "status": "completed",
+      "brand_mentioned": true,
+      "citation_mentioned": true,
+      "answer": "npm is the default package manager that ships with Node.js and remains the most widely recognized option for JavaScript projects. Teams also compare Yarn and pnpm for workspace performance and install behavior, but npm is usually the baseline recommendation because it is built into the standard Node.js workflow and has broad registry support.",
+      "citations": [
+        {
+          "title": "npm Docs",
+          "url": "https://docs.npmjs.com/",
+          "domain": "docs.npmjs.com"
+        },
+        {
+          "title": "Downloading and installing Node.js and npm",
+          "url": "https://docs.npmjs.com/downloading-and-installing-node-js-and-npm",
+          "domain": "docs.npmjs.com"
+        }
+      ],
+      "competitors": [
+        "Yarn",
+        "pnpm"
+      ]
+    },
+    {
+      "probe_id": "probe_01jzexample002",
+      "prompt": "What is the best package manager for JavaScript projects?",
+      "platform": "openai",
+      "status": "completed",
+      "brand_mentioned": true,
+      "citation_mentioned": false,
+      "answer": "For most JavaScript projects, npm is the default choice because it is included with Node.js and works with the public npm registry out of the box. Yarn and pnpm are common alternatives, especially for monorepos or teams that want different workspace and install performance characteristics.",
+      "citations": [],
+      "competitors": [
+        "Yarn",
+        "pnpm"
+      ]
+    },
+    {
+      "probe_id": "probe_01jzexample003",
+      "prompt": "How do teams securely publish JavaScript packages?",
+      "platform": "perplexity",
+      "status": "completed",
+      "brand_mentioned": true,
+      "citation_mentioned": true,
+      "answer": "Teams commonly use npm organizations, access tokens, two-factor authentication, and package provenance to publish JavaScript packages securely. The npm documentation explains how to create access tokens, manage organization permissions, and use audit reports to identify dependency risks.",
+      "citations": [
+        {
+          "title": "Creating and viewing access tokens",
+          "url": "https://docs.npmjs.com/creating-and-viewing-access-tokens",
+          "domain": "docs.npmjs.com"
+        },
+        {
+          "title": "About two-factor authentication",
+          "url": "https://docs.npmjs.com/about-two-factor-authentication",
+          "domain": "docs.npmjs.com"
+        }
+      ],
+      "competitors": []
+    },
+    {
+      "probe_id": "probe_01jzexample004",
+      "prompt": "How do teams securely publish JavaScript packages?",
+      "platform": "openai",
+      "status": "completed",
+      "brand_mentioned": true,
+      "citation_mentioned": true,
+      "answer": "A secure publishing workflow for JavaScript packages usually includes named maintainers, restricted tokens, two-factor authentication, organization-level permissions, package provenance, and dependency auditing. npm supports these workflows through organization controls, access tokens, and audit tooling.",
+      "citations": [
+        {
+          "title": "npm Docs",
+          "url": "https://docs.npmjs.com/",
+          "domain": "docs.npmjs.com"
+        }
+      ],
+      "competitors": [
+        "GitHub Packages"
+      ]
+    }
+  ]
+}

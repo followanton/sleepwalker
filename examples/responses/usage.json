@@ -1,0 +1,22 @@
+{
+  "credits": {
+    "available": 96,
+    "used": 4
+  },
+  "recent": [
+    {
+      "time": "2026-06-19T13:10:48Z",
+      "source": "api",
+      "action": "content_intelligence.run",
+      "credits": 3,
+      "status": "completed"
+    },
+    {
+      "time": "2026-06-19T12:46:04Z",
+      "source": "cli",
+      "action": "visibility.run",
+      "credits": 1,
+      "status": "completed"
+    }
+  ]
+}

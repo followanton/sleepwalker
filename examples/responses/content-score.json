@@ -1,0 +1,59 @@
+{
+  "url": "https://docs.npmjs.com/",
+  "title": "npm Docs",
+  "overall": {
+    "score": 82,
+    "band": "Good",
+    "summary": "The page provides a strong entry point into npm documentation, but the strongest AI-search opportunities are split across separate pages and could be surfaced more clearly from the main docs page."
+  },
+  "content_depth": {
+    "score": 84,
+    "band": "Strong",
+    "notes": "The documentation covers package installation, publishing, organizations, access tokens, and security workflows. The main page is useful as a hub but could expose more direct paths for high-intent questions."
+  },
+  "content_freshness": {
+    "score": 78,
+    "band": "Good",
+    "notes": "The page reads as maintained documentation. Adding more visible references to package provenance, current token practices, and organization workflows would make freshness more obvious to AI systems and human readers."
+  },
+  "trend_coverage": [
+    {
+      "trend": "Secure package publishing",
+      "coverage": 76,
+      "gap": "Security topics are available, but the main docs page does not clearly frame secure publishing as a complete workflow.",
+      "action": "Add a prominent secure publishing path linking tokens, two-factor authentication, provenance, and package access."
+    },
+    {
+      "trend": "Dependency risk and audit workflows",
+      "coverage": 81,
+      "gap": "Audit guidance exists, but the journey from detecting a vulnerability to fixing it could be more explicit.",
+      "action": "Add a short workflow section: install, audit, interpret, update, verify."
+    },
+    {
+      "trend": "Team and organization package management",
+      "coverage": 73,
+      "gap": "Organization features are present but not strongly connected to team package-management intent.",
+      "action": "Group organizations, permissions, teams, and private packages under a clearer team workflow."
+    }
+  ],
+  "recommendations": [
+    {
+      "priority": 1,
+      "title": "Create a visible secure publishing journey",
+      "recommendation": "Add a main-page pathway that links access tokens, two-factor authentication, package provenance, and publishing permissions.",
+      "expected_impact": "Improves citation potential for secure publishing and software supply chain prompts."
+    },
+    {
+      "priority": 2,
+      "title": "Connect audit guidance to dependency management",
+      "recommendation": "Place npm audit guidance closer to install/update documentation and explain how developers move from detection to remediation.",
+      "expected_impact": "Helps AI systems treat npm as a complete dependency-risk workflow, not just a package installer."
+    },
+    {
+      "priority": 3,
+      "title": "Add a team workflow for organizations",
+      "recommendation": "Create a concise path for companies managing private packages, member permissions, publishing rights, and access review.",
+      "expected_impact": "Improves relevance for business and team-oriented package-management queries."
+    }
+  ]
+}

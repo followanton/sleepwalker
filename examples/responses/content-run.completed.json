@@ -1,0 +1,63 @@
+{
+  "run_id": "ci_01jzexample7q6docs",
+  "status": "completed",
+  "source": "api",
+  "url": "https://docs.npmjs.com/",
+  "created_at": "2026-06-19T13:10:11Z",
+  "completed_at": "2026-06-19T13:10:48Z",
+  "result": {
+    "title": "npm Docs",
+    "overall": {
+      "score": 82,
+      "band": "Good",
+      "summary": "The page is a strong documentation hub, with clear opportunities to make secure publishing, auditing, and team package management easier for AI systems to connect."
+    },
+    "content_depth": {
+      "score": 84,
+      "band": "Strong",
+      "summary": "The page and linked documentation cover the expected topic area thoroughly."
+    },
+    "content_freshness": {
+      "score": 78,
+      "band": "Good",
+      "summary": "The documentation appears current, but high-value security and provenance topics could be surfaced more prominently."
+    },
+    "top_trends": [
+      {
+        "name": "Secure package publishing",
+        "coverage": 76,
+        "gap": "Security documentation exists, but the secure publishing workflow is not prominent enough from the main page.",
+        "action": "Create a clear secure publishing path."
+      },
+      {
+        "name": "Dependency risk and audit workflows",
+        "coverage": 81,
+        "gap": "Audit guidance is present but not tightly connected to install and update workflows.",
+        "action": "Show the dependency-risk workflow from audit to remediation."
+      },
+      {
+        "name": "Team and organization package management",
+        "coverage": 73,
+        "gap": "Organization and permission guidance could be grouped more clearly for teams.",
+        "action": "Add a team-oriented path for private packages and member permissions."
+      }
+    ],
+    "recommendations": [
+      {
+        "title": "Create a visible secure publishing journey",
+        "impact": "High",
+        "details": "Link access tokens, two-factor authentication, package provenance, and publishing permissions from one entry point."
+      },
+      {
+        "title": "Connect audit guidance to dependency management",
+        "impact": "Medium",
+        "details": "Explain how developers detect, interpret, update, and verify dependency vulnerabilities."
+      },
+      {
+        "title": "Add a team workflow for organizations",
+        "impact": "Medium",
+        "details": "Group organizations, permissions, private packages, and access review into a business-friendly workflow."
+      }
+    ]
+  }
+}

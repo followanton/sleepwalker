@@ -1,0 +1,55 @@
+{
+  "url": "https://docs.npmjs.com/",
+  "final_url": "https://docs.npmjs.com/",
+  "title": "npm Docs",
+  "description": "Documentation for the npm registry, CLI, package publishing, package management, access control, and organization workflows.",
+  "language": "en",
+  "content_type": "text/html",
+  "content": {
+    "format": "markdown",
+    "title": "npm Docs",
+    "meta_description": "Documentation for the npm registry, CLI, package publishing, package management, access control, and organization workflows.",
+    "headings": [
+      {
+        "level": 1,
+        "text": "npm Docs"
+      },
+      {
+        "level": 2,
+        "text": "Getting started"
+      },
+      {
+        "level": 2,
+        "text": "Packages and modules"
+      },
+      {
+        "level": 2,
+        "text": "Organizations"
+      },
+      {
+        "level": 2,
+        "text": "Security"
+      }
+    ],
+    "content_view": "# npm Docs\n\nDocumentation for using npm as a package manager, registry, and publishing workflow.\n\n## Getting started\n\nnpm helps JavaScript developers install packages, manage dependencies, publish projects, and automate package scripts.\n\n## Packages and modules\n\nThe documentation explains how packages are named, versioned, installed, updated, deprecated, and published to the npm registry.\n\n## Organizations\n\nTeams can use npm organizations to manage members, packages, permissions, access control, and publishing workflows.\n\n## Security\n\nThe docs cover access tokens, two-factor authentication, package provenance, audit reports, and account protection.\n\n## Common tasks\n\n- Install a package\n- Create a package.json file\n- Publish a package\n- Manage access tokens\n- Configure organizations\n- Run npm audit\n"
+  },
+  "links": [
+    {
+      "text": "npm CLI",
+      "url": "https://docs.npmjs.com/cli"
+    },
+    {
+      "text": "Creating and publishing packages",
+      "url": "https://docs.npmjs.com/packages-and-modules/contributing-packages-to-the-registry"
+    },
+    {
+      "text": "Access tokens",
+      "url": "https://docs.npmjs.com/creating-and-viewing-access-tokens"
+    }
+  ],
+  "summary": {
+    "word_count": 96,
+    "heading_count": 5,
+    "link_count": 3
+  }
+}

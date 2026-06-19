@@ -1,0 +1,40 @@
+{
+  "url": "https://docs.npmjs.com/",
+  "industry": "JavaScript package management and software supply chain documentation",
+  "trends": [
+    {
+      "name": "Secure package publishing",
+      "relevance": 98,
+      "gap": "Developers increasingly ask how to publish packages with token controls, two-factor authentication, and provenance.",
+      "action": "Make the secure publishing path easy to find from the main documentation entry point."
+    },
+    {
+      "name": "Dependency risk and audit workflows",
+      "relevance": 95,
+      "gap": "AI answers often group dependency auditing with package management, but pages can split those topics across separate sections.",
+      "action": "Connect install, audit, and remediation guidance in one visible workflow."
+    },
+    {
+      "name": "Team and organization package management",
+      "relevance": 91,
+      "gap": "Company users need private package, organization, and permission workflows explained together.",
+      "action": "Add a team-oriented path that connects organizations, access control, and private packages."
+    },
+    {
+      "name": "Package manager comparisons",
+      "relevance": 87,
+      "gap": "AI systems frequently compare npm with Yarn and pnpm when answering broad JavaScript tooling questions.",
+      "action": "Explain where npm is the default baseline and where alternative tools are commonly considered."
+    }
+  ],
+  "sources": [
+    {
+      "title": "npm Docs",
+      "url": "https://docs.npmjs.com/"
+    },
+    {
+      "title": "npm CLI documentation",
+      "url": "https://docs.npmjs.com/cli"
+    }
+  ]
+}

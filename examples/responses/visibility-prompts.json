@@ -1,0 +1,32 @@
+{
+  "url": "https://docs.npmjs.com/",
+  "brand": "npm",
+  "industry": "JavaScript package management and software supply chain tooling",
+  "prompts": [
+    {
+      "prompt": "What is the best package manager for JavaScript projects?",
+      "intent": "category_comparison",
+      "why": "Tests whether npm appears when users ask broad package-management questions."
+    },
+    {
+      "prompt": "How do teams securely publish JavaScript packages?",
+      "intent": "security_workflow",
+      "why": "Tests whether npm documentation is cited for publishing, access tokens, and account protection."
+    },
+    {
+      "prompt": "What tools help manage dependencies in Node.js projects?",
+      "intent": "workflow_research",
+      "why": "Tests visibility for practical dependency-management workflows."
+    },
+    {
+      "prompt": "How should developers audit open source package vulnerabilities?",
+      "intent": "problem_solution",
+      "why": "Tests whether npm audit and security documentation are surfaced."
+    },
+    {
+      "prompt": "How can a company manage private JavaScript packages?",
+      "intent": "team_buying",
+      "why": "Tests whether npm organizations, access control, and private packages are mentioned."
+    }
+  ]
+}
