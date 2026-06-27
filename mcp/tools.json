@@ -1,0 +1,197 @@
+{
+  "generated_from": "Sleepwalker hosted MCP tool contract",
+  "endpoint": "https://mcp.sleepwalker.ai/mcp",
+  "authentication": [
+    "OAuth",
+    "Bearer token"
+  ],
+  "tools": [
+    {
+      "name": "list_sleepwalker_tests",
+      "title": "List Sleepwalker tests",
+      "description": "List saved Content Intelligence and AI Visibility tests for the authenticated account.",
+      "required_scope": "tests:read",
+      "category": "read",
+      "read_only": true,
+      "billable": false,
+      "creates_run": false,
+      "credit_behavior": "Free read action."
+    },
+    {
+      "name": "get_sleepwalker_test_results",
+      "title": "Get Sleepwalker test results",
+      "description": "Read compact latest run history for a known saved test.",
+      "required_scope": "runs:read",
+      "category": "read",
+      "read_only": true,
+      "billable": false,
+      "creates_run": false,
+      "credit_behavior": "Free read action."
+    },
+    {
+      "name": "get_sleepwalker_reports_by_url",
+      "title": "Get Sleepwalker reports by URL",
+      "description": "Find recent owned reports for a URL across supported Sleepwalker workflows.",
+      "required_scope": "runs:read",
+      "category": "read",
+      "read_only": true,
+      "billable": false,
+      "creates_run": false,
+      "credit_behavior": "Free read action."
+    },
+    {
+      "name": "get_sleepwalker_run_result",
+      "title": "Get Sleepwalker run result",
+      "description": "Fetch one full structured Content Intelligence or AI Visibility run.",
+      "required_scope": "runs:read",
+      "category": "read",
+      "read_only": true,
+      "billable": false,
+      "creates_run": false,
+      "credit_behavior": "Free read action."
+    },
+    {
+      "name": "get_sleepwalker_prompt_response",
+      "title": "Get Sleepwalker prompt response",
+      "description": "Fetch one capped AI Visibility prompt response and optional citations.",
+      "required_scope": "runs:read",
+      "category": "read",
+      "read_only": true,
+      "billable": false,
+      "creates_run": false,
+      "credit_behavior": "Free read action."
+    },
+    {
+      "name": "get_sleepwalker_summaries",
+      "title": "Get Sleepwalker summaries",
+      "description": "Read compact run summaries before drilling into full results.",
+      "required_scope": "runs:read",
+      "category": "read",
+      "read_only": true,
+      "billable": false,
+      "creates_run": false,
+      "credit_behavior": "Free read action."
+    },
+    {
+      "name": "get_sleepwalker_consistent_recommendations",
+      "title": "Get Sleepwalker consistent recommendations",
+      "description": "Find recurring Content Intelligence recommendations across recent runs.",
+      "required_scope": "runs:read",
+      "category": "read",
+      "read_only": true,
+      "billable": false,
+      "creates_run": false,
+      "credit_behavior": "Free read action."
+    },
+    {
+      "name": "list_sleepwalker_visibility_runs",
+      "title": "List Sleepwalker visibility runs",
+      "description": "List saved AI Visibility runs for the authenticated account.",
+      "required_scope": "runs:read",
+      "category": "read",
+      "read_only": true,
+      "billable": false,
+      "creates_run": false,
+      "credit_behavior": "Free read action."
+    },
+    {
+      "name": "get_sleepwalker_visibility_run_status",
+      "title": "Get Sleepwalker visibility run status",
+      "description": "Read AI Visibility run status, summary, and results when available.",
+      "required_scope": "runs:read",
+      "category": "read",
+      "read_only": true,
+      "billable": false,
+      "creates_run": false,
+      "credit_behavior": "Free read action."
+    },
+    {
+      "name": "list_sleepwalker_content_runs",
+      "title": "List Sleepwalker Content Intelligence runs",
+      "description": "List saved Content Intelligence runs for the authenticated account.",
+      "required_scope": "runs:read",
+      "category": "read",
+      "read_only": true,
+      "billable": false,
+      "creates_run": false,
+      "credit_behavior": "Free read action."
+    },
+    {
+      "name": "get_sleepwalker_content_run_status",
+      "title": "Get Sleepwalker Content Intelligence run status",
+      "description": "Read Content Intelligence run status and result when available.",
+      "required_scope": "runs:read",
+      "category": "read",
+      "read_only": true,
+      "billable": false,
+      "creates_run": false,
+      "credit_behavior": "Free read action."
+    },
+    {
+      "name": "serialize_sleepwalker_page_content",
+      "title": "Serialize Sleepwalker page content",
+      "description": "Extract one URL into normalized page content for agents and workflows.",
+      "required_scope": "pages:content:serialize",
+      "category": "action",
+      "read_only": false,
+      "billable": true,
+      "creates_run": false,
+      "credit_behavior": "Uses prepaid credits when billable content is returned."
+    },
+    {
+      "name": "suggest_sleepwalker_visibility_prompts",
+      "title": "Suggest Sleepwalker visibility prompts",
+      "description": "Generate AI Visibility prompt ideas for a URL and target entity.",
+      "required_scope": "visibility:prompts:suggest",
+      "category": "action",
+      "read_only": false,
+      "billable": true,
+      "creates_run": false,
+      "credit_behavior": "Uses prepaid credits when suggestions are returned."
+    },
+    {
+      "name": "create_sleepwalker_visibility_run",
+      "title": "Create Sleepwalker visibility run",
+      "description": "Queue a saved AI Visibility run from prompts and platforms or explicit probes.",
+      "required_scope": "visibility:runs:create",
+      "category": "action",
+      "read_only": false,
+      "billable": true,
+      "creates_run": true,
+      "credit_behavior": "Uses prepaid credits per queued probe."
+    },
+    {
+      "name": "discover_sleepwalker_content_trends",
+      "title": "Discover Sleepwalker content trends",
+      "description": "Find relevant content and market trends for one URL.",
+      "required_scope": "content_intelligence:trends:discover",
+      "category": "action",
+      "read_only": false,
+      "billable": true,
+      "creates_run": false,
+      "credit_behavior": "Uses prepaid credits when trends are returned."
+    },
+    {
+      "name": "score_sleepwalker_content",
+      "title": "Score Sleepwalker content",
+      "description": "Score a page and return prioritized Content Intelligence recommendations.",
+      "required_scope": "content_intelligence:content:score",
+      "category": "action",
+      "read_only": false,
+      "billable": true,
+      "creates_run": false,
+      "credit_behavior": "Uses prepaid credits when scoring completes."
+    },
+    {
+      "name": "create_sleepwalker_content_run",
+      "title": "Create Sleepwalker Content Intelligence run",
+      "description": "Queue a saved Content Intelligence run for one URL.",
+      "required_scope": "content_intelligence:runs:create",
+      "category": "action",
+      "read_only": false,
+      "billable": true,
+      "creates_run": true,
+      "credit_behavior": "Uses prepaid credits based on analysis depth."
+    }
+  ]
+}

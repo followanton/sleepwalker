@@ -46,6 +46,9 @@ jobs:
           cache: npm
           cache-dependency-path: packages/cli/package-lock.json
 
+      - name: Validate MCP catalog
+        run: node scripts/generate-mcp-tools.mjs --check
+
       - name: Install
         working-directory: packages/cli
         run: npm ci

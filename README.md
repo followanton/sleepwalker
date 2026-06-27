@@ -138,6 +138,8 @@ Open [app.sleepwalker.ai](https://app.sleepwalker.ai) for the visual workflow, s
 | [`docs/concepts.md`](docs/concepts.md) | Runs, probes, serialization, scoring, credits |
 | [`docs/cookbook.md`](docs/cookbook.md) | Runnable workflows, including CI checks |
 | [`docs/responses.md`](docs/responses.md) | Full example outputs for the main Sleepwalker actions |
+| [`mcp/server.json`](mcp/server.json) | Remote MCP server manifest |
+| [`mcp/tools.json`](mcp/tools.json) | Public MCP tool catalog, scopes, and credit behavior |
 | [`examples/api/curl`](examples/api/curl) | One-call examples for public API actions |
 | [`examples/api/javascript`](examples/api/javascript) | Raw `fetch` plus a zero-dependency client helper |
 | [`examples/api/python`](examples/api/python) | `urllib` examples plus a small client class |

@@ -1,0 +1,25 @@
+name: MCP Catalog Live Check
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: "17 6 * * *"
+
+permissions:
+  contents: read
+
+jobs:
+  live-tool-names:
+    name: Live tool names
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v5
+
+      - name: Setup Node
+        uses: actions/setup-node@v5
+        with:
+          node-version: 20
+
+      - name: Compare catalog with live MCP root
+        run: node scripts/generate-mcp-tools.mjs --check-live
