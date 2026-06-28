@@ -1,9 +1,24 @@
 {
   "$schema": "https://static.modelcontextprotocol.io/schemas/2025-12-11/server.schema.json",
-  "name": "ai.sleepwalker/mcp",
+  "name": "ai.sleepwalker/sleepwalker",
   "title": "Sleepwalker",
   "description": "AI Visibility and Content Intelligence through a hosted, OAuth-protected MCP server.",
   "version": "0.1.0",
+  "websiteUrl": "https://www.sleepwalker.ai/docs/mcp/",
+  "repository": {
+    "url": "https://github.com/followanton/sleepwalker",
+    "source": "github",
+    "id": "1273674103"
+  },
+  "icons": [
+    {
+      "src": "https://www.sleepwalker.ai/favicon.png",
+      "mimeType": "image/png",
+      "sizes": [
+        "2000x2000"
+      ]
+    }
+  ],
   "remotes": [
     {
       "type": "streamable-http",
