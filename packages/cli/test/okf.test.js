@@ -166,6 +166,26 @@ test("hostile control, ANSI, and bidi characters never reach the bundle", () => 
   assert.match(concept, /Salegpj\.exe/);
 });
 
+test("control chars between blocks do not leave orphaned blank-line runs", () => {
+  // Regression: control chars (here \x1E) interleaved with newlines used to
+  // break up whitespace runs so collapse missed them; stripping the control
+  // chars afterward then left long runs of blank lines. Sanitize-before-collapse
+  // must leave at most one blank line (\n\n) anywhere in the body.
+  const sep = "\x1E".repeat(6);
+  const html =
+    `<html><head><title>T</title></head><body><main>` +
+    `<h1>Heading</h1>` +
+    `<p>First paragraph.</p>${sep}${sep}` +
+    `<p>Second paragraph.</p>` +
+    `</main></body></html>`;
+  const { files } = buildBundle({ url: "https://x.com/", html, now: "2026-07-05T00:00:00Z", cliVersion: "t" });
+  const concept = Object.entries(files).find(([n]) => n !== "index.md" && n !== "log.md")[1];
+  let longest = 0, cur = 0;
+  for (const ch of concept) { if (ch === "\n") { cur++; if (cur > longest) longest = cur; } else cur = 0; }
+  assert.ok(longest <= 2, `expected no blank-line run > 1, saw ${longest} consecutive newlines`);
+  assert.match(concept, /First paragraph\.\n\nSecond paragraph\./);
+});
+
 test("buildBundle surfaces extraNotes in log.md and sanitizes them", () => {
   const noisyNote = `page truncated \x1B[31mmid-way\x1B[0m`;
   const { files, summary } = buildBundle({

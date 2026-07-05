@@ -196,6 +196,10 @@ function htmlToMarkdown(fragment, baseUrl) {
   // Drop empty heading markers left when a heading's text lived in nested blocks
   // that were stripped (avoids junk lines like a bare "#" or "##").
   out = out.replace(/^[ \t]*#{1,6}[ \t]*$/gm, "");
+  // Strip control/bidi characters BEFORE collapsing: if they sit between
+  // newlines they break up blank-line runs, and stripping them afterward would
+  // leave long orphaned newline runs that nothing re-collapses.
+  out = sanitizeText(out);
   return collapseWhitespace(out);
 }
 
@@ -304,7 +308,7 @@ export function extractConcept(html, url) {
     title: sanitizeText(title).slice(0, 300),
     description: sanitizeText(firstSentence || "").slice(0, 300),
     resource,
-    body: sanitizeText(body),
+    body, // already sanitized-then-collapsed inside htmlToMarkdown
     links: links.map((link) => ({ ...link, text: sanitizeText(link.text) })),
   };
 }

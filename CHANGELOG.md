@@ -2,6 +2,13 @@
 
 Notable changes to the public developer tools. The hosted engine ships on its own cadence.
 
+## 2026-07-05 (later)
+
+### Fixed
+- `okf export` (`@sleepwalkerai/cli` 0.2.1): pages with control characters
+  between block elements no longer produce long runs of blank lines in the
+  bundle. Content is now sanitized before whitespace is collapsed.
+
 ## 2026-07-05
 
 ### Added
