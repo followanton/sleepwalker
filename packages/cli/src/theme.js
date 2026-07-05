@@ -151,6 +151,9 @@ ${section("Read")}
   ${command("sleepwalker tests list")} ${muted("[--limit 20] [--type ai_citations|content_intelligence]")}
   ${command("sleepwalker reports by-url <url>")} ${muted("[--type ai_citations|content_intelligence]")}
 
+${section("Local (free — no account, no credits)")}
+  ${command("sleepwalker okf export <url>")} ${muted("[--out <dir>] [--force]  build an Open Knowledge Format bundle on your machine")}
+
 ${section("Actions")}
   ${command("sleepwalker page serialize <url>")} ${muted("[--max-chars 4000] [--offset 0]")}
   ${command("sleepwalker visibility suggest-prompts <url>")} ${muted("--brand <brand>")}
@@ -168,7 +171,7 @@ ${section("Global options")}
   ${theme.info("--version")}       Show version.
 
 ${section("Environment")}
-  ${theme.info("SLEEPWALKER_API_KEY")}       API key from the Sleepwalker app.
+  ${theme.info("SLEEPWALKER_API_KEY")}       API key from the Sleepwalker Console.
   ${theme.info("SLEEPWALKER_API_BASE_URL")}  API base URL. Defaults to https://api.sleepwalker.ai.
 `;
 }

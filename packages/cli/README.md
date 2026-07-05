@@ -11,7 +11,9 @@ Public package:
 @sleepwalkerai/cli
 ```
 
-Install it from npm or run it directly with `npx`.
+The package remains private in this monorepo so it cannot be published from
+the product repository by mistake. Public releases happen from the
+`followanton/sleepwalker` developer repository.
 
 ## Install
 
@@ -21,6 +23,7 @@ sleepwalker init
 sleepwalker auth key set sw_api_live_...
 sleepwalker menu
 sleepwalker doctor
+sleepwalker commands
 ```
 
 One-off usage:
@@ -34,32 +37,31 @@ npx @sleepwalkerai/cli doctor
 From this repository:
 
 ```bash
-cd packages/cli
-node ./bin/sleepwalker.js
-node ./bin/sleepwalker.js menu
-node ./bin/sleepwalker.js init
-node ./bin/sleepwalker.js commands
+node sleepwalker-cli/bin/sleepwalker.js
+node sleepwalker-cli/bin/sleepwalker.js menu
+node sleepwalker-cli/bin/sleepwalker.js init
+node sleepwalker-cli/bin/sleepwalker.js commands
 ```
 
 With an API key:
 
 ```bash
 export SLEEPWALKER_API_KEY=sw_api_live_...
-node ./bin/sleepwalker.js credits
+node sleepwalker-cli/bin/sleepwalker.js credits
 ```
 
 Or store the key locally:
 
 ```bash
-node ./bin/sleepwalker.js auth key set sw_api_live_...
-node ./bin/sleepwalker.js doctor
+node sleepwalker-cli/bin/sleepwalker.js auth key set sw_api_live_...
+node sleepwalker-cli/bin/sleepwalker.js doctor
 ```
 
 To point the CLI at a non-production API base:
 
 ```bash
-node ./bin/sleepwalker.js config set api-base-url https://api.sleepwalker.ai
-node ./bin/sleepwalker.js config show
+node sleepwalker-cli/bin/sleepwalker.js config set api-base-url https://api.sleepwalker.ai
+node sleepwalker-cli/bin/sleepwalker.js config show
 ```
 
 ## Examples
@@ -74,7 +76,17 @@ sleepwalker visibility run https://www.sleepwalker.ai --brand Sleepwalker --prom
 sleepwalker ci score https://www.sleepwalker.ai
 sleepwalker ci run https://www.sleepwalker.ai --depth full --watch
 sleepwalker activity list
+sleepwalker okf export https://www.sleepwalker.ai
 ```
+
+`okf export` is free, open source (MIT, like the rest of this CLI), and runs
+entirely on your machine — it fetches the page and writes an
+[Open Knowledge Format](https://github.com/GoogleCloudPlatform/knowledge-catalog/tree/main/okf)
+bundle (agent-ready markdown) to a local directory. No account, no API key, no
+credits. Use `--out <dir>` to choose the destination and `--force` to overwrite.
+Hostile page content is sanitized (control characters, ANSI escapes, and bidi
+overrides are stripped), fetches time out after 30 seconds, and oversized pages
+are truncated with a note in `log.md`.
 
 Add `--json` to print raw API responses.
 
@@ -130,5 +142,5 @@ or `FORCE_COLOR=1` to force it in supported terminals.
 If your current shell exports `NO_COLOR`, remove it while previewing:
 
 ```bash
-env -u NO_COLOR FORCE_COLOR=1 node ./bin/sleepwalker.js --help
+env -u NO_COLOR FORCE_COLOR=1 node sleepwalker-cli/bin/sleepwalker.js --help
 ```

@@ -18,6 +18,7 @@ import {
   readLinesFromFile,
 } from "./args.js";
 import { printJson, printKeyValue, printList, printNextCommands, printRunSummary } from "./format.js";
+import { buildBundle, defaultOutDir, writeBundle, OKF_USER_AGENT } from "./okf.js";
 import { createTheme, renderCommandsHelp, renderHelp, sanitizeTerminalText, styleStatus } from "./theme.js";
 
 const VERSION = "0.1.0";
@@ -699,7 +700,7 @@ async function handleDoctor(flags, io) {
         "sleepwalker reports by-url https://www.sleepwalker.ai",
         "sleepwalker commands",
       ], theme);
-      io.stdout.write(`\n${theme.muted("If an action fails with a scope error, generate a new key in the Sleepwalker app > API.")}\n`);
+      io.stdout.write(`\n${theme.muted("If an action fails with a scope error, generate a new key in Console > API.")}\n`);
     }
   });
 
@@ -739,7 +740,7 @@ async function handleAuth(args, flags, io) {
     return;
   }
   if (subcommand === "login") {
-    io.stdout.write("Create an API key in the Sleepwalker app, then run:\n\n");
+    io.stdout.write("Create an API key in the Sleepwalker Console, then run:\n\n");
     io.stdout.write(`  ${theme.command("sleepwalker auth key set sw_api_live_...")}\n\n`);
     io.stdout.write(`${theme.muted("OAuth/device login is not part of this first CLI scaffold.")}\n`);
     return;
@@ -1105,6 +1106,85 @@ async function handleCi(args, flags, io) {
   throw makeError("Unknown ci command. Run `sleepwalker --help`.");
 }
 
+async function handleOkf(args, flags, io) {
+  const theme = io.theme;
+  const usage = "Usage: sleepwalker okf export <url> [--out <dir>] [--force]";
+  if (args[0] !== "export") {
+    throw makeError(usage);
+  }
+  const url = requireArg(args[1] || flagString(flags, "url", ""), usage);
+  const fetchImpl = io.fetch || globalThis.fetch;
+  if (typeof fetchImpl !== "function") {
+    throw makeError("This command needs the built-in fetch (Node >= 18).");
+  }
+
+  let response;
+  try {
+    response = await fetchImpl(url, {
+      redirect: "follow",
+      headers: { "user-agent": OKF_USER_AGENT, accept: "text/html,application/xhtml+xml" },
+      // A hanging or slow-dripping server should fail the command, not stall it.
+      signal: typeof AbortSignal?.timeout === "function" ? AbortSignal.timeout(30_000) : undefined,
+    });
+  } catch (error) {
+    const reason = error?.name === "TimeoutError" ? "timed out after 30s" : error.message;
+    throw makeError(`Could not fetch ${url}: ${reason}`);
+  }
+  if (!response.ok) {
+    throw makeError(`Fetch failed for ${url}: HTTP ${response.status}.`);
+  }
+  const finalUrl = response.url || url;
+  const extraNotes = [];
+  const contentType = String(response.headers?.get?.("content-type") || "");
+  if (contentType && !/html|xml/i.test(contentType)) {
+    extraNotes.push(`response content-type was ${contentType.split(";")[0].trim()}; extraction may be unreliable`);
+  }
+  const MAX_HTML_CHARS = 5_000_000;
+  let html = await response.text();
+  if (html.length > MAX_HTML_CHARS) {
+    html = html.slice(0, MAX_HTML_CHARS);
+    extraNotes.push(`page exceeded ${MAX_HTML_CHARS} characters; extraction used the truncated beginning`);
+  }
+  const now = new Date().toISOString();
+  const { files, summary } = buildBundle({ url: finalUrl, html, now, cliVersion: VERSION, extraNotes });
+  const outDir = flagString(flags, "out", "") || defaultOutDir(finalUrl);
+  const { dir } = await writeBundle(outDir, files, { force: flagBool(flags, "force", false) });
+
+  const payload = {
+    url: finalUrl,
+    out: dir,
+    okf_version: "0.1",
+    credits: 0,
+    concepts: summary.conceptCount,
+    files: summary.files,
+    notes: summary.notes,
+  };
+  output(io.stdout, flags, payload, (data) => {
+    io.stdout.write(`${theme.accent("OKF bundle created")}\n\n`);
+    printKeyValue(
+      io.stdout,
+      [
+        ["URL", theme.info(data.url)],
+        ["Output", data.out],
+        ["Files", String(data.files.length)],
+        ["Credits", "0 (ran locally — no account needed)"],
+      ],
+      theme,
+    );
+    if (data.notes && data.notes.length) {
+      io.stdout.write(`\n${theme.muted(`note: ${data.notes.join("; ")}`)}\n`);
+    }
+    printNextCommands(
+      io.stdout,
+      [
+        `sleepwalker okf export ${shellQuote(data.url)} --json`,
+        `sleepwalker ci score ${shellQuote(data.url)}  # engine-grade analysis (account + credits)`,
+      ],
+      theme,
+    );
+  });
+}
+
 export async function runCli(argv, io) {
   const { positional, flags } = parseFlags(argv);
   io.theme = createTheme({ env: io.env, stdout: io.stdout });
@@ -1151,6 +1231,8 @@ export async function runCli(argv, io) {
       await handleVisibility(rest, flags, io);
     } else if (command === "ci" || command === "content") {
       await handleCi(rest, flags, io);
+    } else if (command === "okf") {
+      await handleOkf(rest, flags, io);
     } else {
       throw makeError(`Unknown command: ${command}. Run \`sleepwalker --help\`.`);
     }

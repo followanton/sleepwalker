@@ -2,6 +2,20 @@
 
 Notable changes to the public developer tools. The hosted engine ships on its own cadence.
 
+## 2026-07-05
+
+### Added
+- `sleepwalker okf export <url>` (`@sleepwalkerai/cli` 0.2.0): build an
+  [Open Knowledge Format](https://github.com/GoogleCloudPlatform/knowledge-catalog/tree/main/okf)
+  bundle from a web page — free, local, no account or credits. Dependency-free
+  local extraction to agent-ready markdown (`index.md`, `log.md`, one concept
+  per page). See `docs/cli.md`.
+
+### Security
+- OKF export sanitizes extracted page content (control characters, ANSI
+  escapes, bidirectional overrides) and quotes YAML frontmatter values so a
+  hostile page cannot inject terminal escapes or corrupt a bundle.
+
 ## 2026-06-19
 
 ### Added
