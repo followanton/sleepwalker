@@ -111,7 +111,7 @@ test("interactive menu requires a TTY", async () => {
 test("prints version without falling through to help", async () => {
   const { io, stdout } = memoryIo();
   await runCli(["--version"], io);
-  assert.equal(stdout(), "0.1.0\n");
+  assert.equal(stdout(), "0.2.0\n");
 });
 
 test("init guides setup before API key is configured", async () => {

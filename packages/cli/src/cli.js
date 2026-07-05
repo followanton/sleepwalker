@@ -21,7 +21,7 @@ import { printJson, printKeyValue, printList, printNextCommands, printRunSummary
 import { buildBundle, defaultOutDir, writeBundle, OKF_USER_AGENT } from "./okf.js";
 import { createTheme, renderCommandsHelp, renderHelp, sanitizeTerminalText, styleStatus } from "./theme.js";
 
-const VERSION = "0.1.0";
+const VERSION = "0.2.0";
 const DEFAULT_POLL_INTERVAL_MS = 5000;
 const DEFAULT_MAX_WAIT_SECONDS = 900;
 const TERMINAL_RUN_STATUSES = new Set([
