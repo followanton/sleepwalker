@@ -10,8 +10,12 @@ What's next for Sleepwalker?
 
 ## Soon
  
-- Open Source OKF capabilities.
+- Higher-fidelity and multi-page OKF export (crawl + `okf validate`).
 - Microsoft SkillOpt integration.
+
+## Shipped
+
+- Open Knowledge Format export — free, local `sleepwalker okf export`.
 
 ## Exploring
 
