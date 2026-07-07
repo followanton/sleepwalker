@@ -111,7 +111,8 @@ test("interactive menu requires a TTY", async () => {
 test("prints version without falling through to help", async () => {
   const { io, stdout } = memoryIo();
   await runCli(["--version"], io);
-  assert.equal(stdout(), "0.2.0\n");
+  const pkg = JSON.parse(fs.readFileSync(new URL("../package.json", import.meta.url), "utf8"));
+  assert.equal(stdout(), `${pkg.version}\n`);
 });
 
 test("init guides setup before API key is configured", async () => {
