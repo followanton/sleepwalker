@@ -2,6 +2,13 @@
 
 Notable changes to the public developer tools. The hosted engine ships on its own cadence.
 
+## 2026-07-07
+
+### Changed
+- `@sleepwalkerai/cli` 0.2.2 (docs only, no code changes): the README now
+  leads with the free, local `okf export`, uses sentence-case headings, and
+  reads in plainer language. Local usage paths corrected.
+
 ## 2026-07-05 (later)
 
 ### Fixed
