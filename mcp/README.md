@@ -23,7 +23,7 @@ See:
 - [Bearer-token setup](../examples/mcp/bearer-token.md)
 - [Hosted MCP docs](https://www.sleepwalker.ai/docs/mcp/)
 
-## Registry Files
+## Registry files
 
 - [`server.json`](server.json) describes the remote Streamable HTTP MCP endpoint.
 - [`tools.json`](tools.json) lists the public tool surface, required scopes, and credit behavior.

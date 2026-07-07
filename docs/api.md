@@ -15,9 +15,9 @@ Authorization: Bearer sw_api_live_...
 Use API keys from the Sleepwalker app. Store them in environment variables,
 not in source files.
 
-## Common Actions
+## Common actions
 
-### Serialize A Page
+### Serialize a page
 
 ```bash
 curl -s https://api.sleepwalker.ai/v1/pages/content/serialize \
@@ -26,7 +26,7 @@ curl -s https://api.sleepwalker.ai/v1/pages/content/serialize \
   -d '{"url":"https://www.sleepwalker.ai","max_chars":2000}'
 ```
 
-### Create An AI Visibility Run
+### Create an AI Visibility run
 
 ```bash
 curl -s https://api.sleepwalker.ai/v1/visibility/runs \
@@ -41,14 +41,14 @@ curl -s https://api.sleepwalker.ai/v1/visibility/runs \
   }'
 ```
 
-### Check Run Status
+### Check run status
 
 ```bash
 curl -s https://api.sleepwalker.ai/v1/visibility/runs/<run_id> \
   -H "Authorization: Bearer $SLEEPWALKER_API_KEY"
 ```
 
-### Create A Content Intelligence Run
+### Create a Content Intelligence run
 
 ```bash
 curl -s https://api.sleepwalker.ai/v1/content-intelligence/runs \
@@ -61,7 +61,7 @@ curl -s https://api.sleepwalker.ai/v1/content-intelligence/runs \
   }'
 ```
 
-## More Documentation
+## More documentation
 
 See the hosted API docs:
 

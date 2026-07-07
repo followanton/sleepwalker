@@ -29,8 +29,8 @@
 
 Sleepwalker helps teams understand how AI systems talk about a brand and what content needs to change. It combines two connected workflows:
 
-- **AI Visibility** - run prompts across ChatGPT, Perplexity, Grok, and Gemini; capture full answers, citations, competitors, and mention types.
-- **Content Intelligence** - serialize public pages, discover demand, score content depth and freshness, and return practical recommendations.
+- **AI Visibility**: run prompts across ChatGPT, Perplexity, Grok, and Gemini; capture full answers, citations, competitors, and mention types.
+- **Content Intelligence**: serialize public pages, discover demand, score content depth and freshness, and return practical recommendations.
 
 You can run the same work from the hosted app, the public API, MCP clients, or the CLI. Results stay connected, so a run started by an agent can be reviewed later in the app or queried from code.
 
@@ -38,15 +38,17 @@ This repository is the public developer surface for Sleepwalker: CLI package, AP
 
 ## Quickstart
 
+Try the CLI without an account first. `okf export` is free and open source. It runs on your machine, fetches a page, and writes an agent-ready markdown bundle to a local folder. No API key, no credits:
+
+```bash
+npx -y @sleepwalkerai/cli okf export https://www.sleepwalker.ai
+```
+
+For everything else, install the CLI:
+
 ```bash
 npm install -g @sleepwalkerai/cli
 sleepwalker init
-```
-
-Or run one command without installing:
-
-```bash
-npx -y @sleepwalkerai/cli doctor
 ```
 
 Create an API key in the [Sleepwalker app](https://app.sleepwalker.ai), then run your first visibility check:
@@ -67,19 +69,20 @@ sleepwalker visibility run https://yourbrand.com \
 
 Want to see the shape of the data first? Open [`docs/responses.md`](docs/responses.md) for full example outputs from serialization, prompt suggestions, AI Visibility, Content Intelligence, and report lookup.
 
-## What You Can Build
+## What you can build
 
 <p align="center">
   <img src="assets/visibility.svg" alt="Sample AI Visibility result across platforms" width="92%">
 </p>
 
-- **AI Search (GEO) monitoring**: Setup prompt tracking against specific URLs across ChatGPT, Perplexity, Grok and Gemini.
-- **Agent workflows**: let MCP-capable clients (such as Claude) get access to vast Sleepwalker data, featuring LLM answers, cited domains, competitor performance, content trends and much more.
+- **AI search (GEO) monitoring**: set up prompt tracking for specific URLs across ChatGPT, Perplexity, Grok, and Gemini.
+- **Agent workflows**: give MCP clients such as Claude access to LLM answers, cited domains, competitor performance, and content trends.
 - **Product integrations**: use the API from internal tools, client portals, reporting pipelines, or automated QA checks.
-- **In-depth content review**: inspect what a page says, which trends it misses, and what should be fixed first.
-- **Mix and match Sleepwalker capabilities**: Create custom skills and workflows involving other MCPs to match your business requirements.
+- **Content review**: inspect what a page says, which trends it misses, and what to fix first.
+- **Free page export**: turn any public page into agent-ready markdown with `okf export`. Open source, runs locally, no account needed.
+- **Custom workflows**: combine Sleepwalker with other MCP servers to build your own skills and automations.
 
-## Access Paths
+## Access paths
 
 | Surface | Best for | Entry point |
 |---|---|---|
@@ -92,7 +95,7 @@ Want to see the shape of the data first? Open [`docs/responses.md`](docs/respons
   <img src="assets/architecture.svg" alt="Sleepwalker action flow across app, API, MCP, and CLI" width="68%">
 </p>
 
-## Run It From Anywhere
+## Run Sleepwalker from anywhere
 
 **CLI**
 
@@ -130,12 +133,13 @@ Ask an MCP-capable client: `Check how YourBrand appears across AI search this we
 
 Open [app.sleepwalker.ai](https://app.sleepwalker.ai) for the visual workflow, saved results, credits, and keys.
 
-## Developer Resources
+## Developer resources
 
 | Path | What it shows |
 |---|---|
 | [`docs/agents.md`](docs/agents.md) | MCP tool catalog and agent workflow walkthrough |
 | [`docs/concepts.md`](docs/concepts.md) | Runs, probes, serialization, scoring, credits |
+| [`docs/cli.md`](docs/cli.md) | CLI usage, including the free local `okf export` |
 | [`docs/cookbook.md`](docs/cookbook.md) | Runnable workflows, including CI checks |
 | [`docs/responses.md`](docs/responses.md) | Full example outputs for the main Sleepwalker actions |
 | [`mcp/server.json`](mcp/server.json) | Remote MCP server manifest |
@@ -147,9 +151,9 @@ Open [app.sleepwalker.ai](https://app.sleepwalker.ai) for the visual workflow, s
 
 ## Credits
 
-Sleepwalker is pay as you go. Reads, lists, and status polling are normally unmetered. Actions that run work, such as visibility checks, content scoring, and serialization, use prepaid credits. Details live in [docs/credits.md](docs/credits.md) and the hosted [billing docs](https://www.sleepwalker.ai/docs/billing/credits/).
+Sleepwalker is pay as you go. Reads, lists, and status polling are normally unmetered. Actions that run work, such as visibility checks, content scoring, and serialization, use prepaid credits. `okf export` is the exception: it runs locally and is always free. Details live in [docs/credits.md](docs/credits.md) and the hosted [billing docs](https://www.sleepwalker.ai/docs/billing/credits/).
 
-## Repository Boundary
+## Repository boundary
 
 This repository is intentionally small.
 

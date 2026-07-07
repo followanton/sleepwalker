@@ -51,7 +51,7 @@ Add `--json` for automation.
 
 `sleepwalker okf export <url>` turns a web page into an
 [Open Knowledge Format](https://github.com/GoogleCloudPlatform/knowledge-catalog/tree/main/okf)
-bundle — a small directory of agent-ready markdown (`index.md`, `log.md`, and
+bundle: a small directory of agent-ready markdown (`index.md`, `log.md`, and
 one concept file per page) that any AI agent can read directly.
 
 It runs **entirely on your machine**: it fetches the URL and extracts content

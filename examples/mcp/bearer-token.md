@@ -1,6 +1,6 @@
-# MCP Bearer Token Setup
+# MCP bearer token setup
 
-For custom or local MCP clients, create an MCP bearer token in the Sleepwalker
+For custom or local MCP clients, create an MCP bearer token in the
 Sleepwalker app.
 
 Hosted MCP endpoint:

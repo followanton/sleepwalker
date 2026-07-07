@@ -1,6 +1,18 @@
 # Quickstart
 
-## 1. Create A Sleepwalker Account
+## 1. Try it without an account
+
+One CLI command is free and runs entirely on your machine:
+
+```bash
+npx -y @sleepwalkerai/cli okf export https://www.sleepwalker.ai
+```
+
+It turns a public page into an agent-ready markdown bundle in a local
+folder. No account, no API key, no credits. See [cli.md](cli.md) for
+details.
+
+## 2. Create a Sleepwalker account
 
 Create an account in the hosted app:
 
@@ -11,7 +23,7 @@ https://app.sleepwalker.ai
 The app is where you manage credits, API keys, MCP access, and saved
 results.
 
-## 2. Choose An Access Path
+## 3. Choose an access path
 
 | Path | Use when |
 |---|---|
@@ -20,7 +32,7 @@ results.
 | MCP | You want an agent or MCP client to run Sleepwalker actions. |
 | CLI | You want terminal workflows. |
 
-## 3. Create An API Key
+## 4. Create an API key
 
 Open the Sleepwalker app, go to API, and create a key.
 
@@ -30,7 +42,7 @@ Use it from your shell:
 export SLEEPWALKER_API_KEY=sw_api_live_...
 ```
 
-## 4. Try The CLI
+## 5. Try the CLI
 
 ```bash
 npm install -g @sleepwalkerai/cli
@@ -46,14 +58,14 @@ Or run one command without installing:
 npx -y @sleepwalkerai/cli doctor
 ```
 
-## 5. Try The API
+## 6. Try the API
 
 ```bash
 curl -s https://api.sleepwalker.ai/v1/tests \
   -H "Authorization: Bearer $SLEEPWALKER_API_KEY"
 ```
 
-## 6. Try MCP
+## 7. Try MCP
 
 Use this hosted MCP endpoint in an MCP-capable client:
 

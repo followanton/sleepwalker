@@ -2,18 +2,15 @@
 
 Command-line client for the Sleepwalker API.
 
-This package is intentionally a thin API client. It does not run Sleepwalker
-analysis locally.
+Most commands are a thin client over the hosted API and do not run
+Sleepwalker analysis locally. The exception is `okf export`, which is free
+and runs entirely on your machine.
 
 Public package:
 
 ```text
 @sleepwalkerai/cli
 ```
-
-The package remains private in this monorepo so it cannot be published from
-the product repository by mistake. Public releases happen from the
-`followanton/sleepwalker` developer repository.
 
 ## Install
 
@@ -32,36 +29,36 @@ One-off usage:
 npx @sleepwalkerai/cli doctor
 ```
 
-## Local Usage
+## Local usage
 
-From this repository:
+From the root of this repository:
 
 ```bash
-node sleepwalker-cli/bin/sleepwalker.js
-node sleepwalker-cli/bin/sleepwalker.js menu
-node sleepwalker-cli/bin/sleepwalker.js init
-node sleepwalker-cli/bin/sleepwalker.js commands
+node packages/cli/bin/sleepwalker.js
+node packages/cli/bin/sleepwalker.js menu
+node packages/cli/bin/sleepwalker.js init
+node packages/cli/bin/sleepwalker.js commands
 ```
 
 With an API key:
 
 ```bash
 export SLEEPWALKER_API_KEY=sw_api_live_...
-node sleepwalker-cli/bin/sleepwalker.js credits
+node packages/cli/bin/sleepwalker.js credits
 ```
 
 Or store the key locally:
 
 ```bash
-node sleepwalker-cli/bin/sleepwalker.js auth key set sw_api_live_...
-node sleepwalker-cli/bin/sleepwalker.js doctor
+node packages/cli/bin/sleepwalker.js auth key set sw_api_live_...
+node packages/cli/bin/sleepwalker.js doctor
 ```
 
 To point the CLI at a non-production API base:
 
 ```bash
-node sleepwalker-cli/bin/sleepwalker.js config set api-base-url https://api.sleepwalker.ai
-node sleepwalker-cli/bin/sleepwalker.js config show
+node packages/cli/bin/sleepwalker.js config set api-base-url https://api.sleepwalker.ai
+node packages/cli/bin/sleepwalker.js config show
 ```
 
 ## Examples
@@ -80,7 +77,7 @@ sleepwalker okf export https://www.sleepwalker.ai
 ```
 
 `okf export` is free, open source (MIT, like the rest of this CLI), and runs
-entirely on your machine — it fetches the page and writes an
+entirely on your machine. It fetches the page and writes an
 [Open Knowledge Format](https://github.com/GoogleCloudPlatform/knowledge-catalog/tree/main/okf)
 bundle (agent-ready markdown) to a local directory. No account, no API key, no
 credits. Use `--out <dir>` to choose the destination and `--force` to overwrite.
@@ -104,7 +101,7 @@ sleepwalker visibility run https://www.sleepwalker.ai \
 that with `--max-wait-seconds <seconds>` when a workflow needs a shorter or
 longer wait.
 
-## Smoke Tests
+## Smoke tests
 
 Local command smoke:
 
@@ -126,7 +123,7 @@ intentional serialization action:
 SLEEPWALKER_CLI_SMOKE_WRITE=1 npm run smoke:live
 ```
 
-## Terminal Color
+## Terminal color
 
 Human output uses Sleepwalker-inspired terminal color when the terminal supports
 it:
@@ -142,5 +139,5 @@ or `FORCE_COLOR=1` to force it in supported terminals.
 If your current shell exports `NO_COLOR`, remove it while previewing:
 
 ```bash
-env -u NO_COLOR FORCE_COLOR=1 node sleepwalker-cli/bin/sleepwalker.js --help
+env -u NO_COLOR FORCE_COLOR=1 node packages/cli/bin/sleepwalker.js --help
 ```

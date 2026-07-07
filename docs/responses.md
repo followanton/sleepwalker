@@ -1,10 +1,10 @@
-# Example Outputs
+# Example outputs
 
 The fastest way to understand Sleepwalker is to see what comes back.
 
 These examples use `https://docs.npmjs.com/` as the target URL and `npm` as the brand. Real answers vary by page, prompt, platform, and timing, but the examples show the kind of output Sleepwalker returns through the CLI, API, and MCP.
 
-## Output Map
+## Output map
 
 | Work | CLI command or tool | Full example |
 |---|---|---|
@@ -17,7 +17,7 @@ These examples use `https://docs.npmjs.com/` as the target URL and `npm` as the 
 | Content Intelligence run | `sleepwalker ci run`, `sleepwalker ci status` / `create_sleepwalker_content_run` | [`content-run.completed.json`](../examples/responses/content-run.completed.json) |
 | Reports by URL | `sleepwalker reports by-url` / `get_sleepwalker_reports_by_url` | [`reports-by-url.json`](../examples/responses/reports-by-url.json) |
 
-## Connection And Credits
+## Connection and credits
 
 Command:
 
@@ -45,7 +45,7 @@ Next
 
 Full JSON example: [`examples/responses/usage.json`](../examples/responses/usage.json)
 
-## Page Serialization
+## Page serialization
 
 Command:
 
@@ -61,7 +61,7 @@ What you get:
 
 Full JSON example: [`examples/responses/page-serialization.json`](../examples/responses/page-serialization.json)
 
-## AI Visibility Prompt Suggestions
+## AI Visibility prompt suggestions
 
 Command:
 
@@ -77,7 +77,7 @@ What you get:
 
 Full JSON example: [`examples/responses/visibility-prompts.json`](../examples/responses/visibility-prompts.json)
 
-## AI Visibility Run
+## AI Visibility run
 
 Command:
 
@@ -102,7 +102,7 @@ What you get:
 
 Full JSON example: [`examples/responses/visibility-run.completed.json`](../examples/responses/visibility-run.completed.json)
 
-## Content Trend Discovery
+## Content trend discovery
 
 API and MCP action:
 
@@ -118,7 +118,7 @@ What you get:
 
 Full JSON example: [`examples/responses/content-trends.json`](../examples/responses/content-trends.json)
 
-## Content Score
+## Content score
 
 Command:
 
@@ -135,7 +135,7 @@ What you get:
 
 Full JSON example: [`examples/responses/content-score.json`](../examples/responses/content-score.json)
 
-## Content Intelligence Run
+## Content Intelligence run
 
 Command:
 
@@ -153,7 +153,7 @@ What you get:
 
 Full JSON example: [`examples/responses/content-run.completed.json`](../examples/responses/content-run.completed.json)
 
-## Reports By URL
+## Reports by URL
 
 Command:
 
@@ -169,7 +169,7 @@ What you get:
 
 Full JSON example: [`examples/responses/reports-by-url.json`](../examples/responses/reports-by-url.json)
 
-## Same Outputs Through MCP
+## Same outputs through MCP
 
 MCP clients expose the same actions as tools. The wording changes by client, but the result shape is the same:
 

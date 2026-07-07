@@ -23,7 +23,7 @@ hosted connector flow is designed to request both read and action scopes so
 agents can inspect reports and run Sleepwalker actions when credits are
 available.
 
-## Bearer Token
+## Bearer token
 
 For custom or local clients, create a bearer token in the Sleepwalker app
 and pass it as:
@@ -32,7 +32,7 @@ and pass it as:
 Authorization: Bearer sw_mcp_live_...
 ```
 
-## Tool Surface
+## Tool surface
 
 Sleepwalker MCP exposes tools for:
 
@@ -46,7 +46,7 @@ Sleepwalker MCP exposes tools for:
 
 Billable actions use prepaid Sleepwalker credits.
 
-## More Documentation
+## More documentation
 
 See the hosted MCP docs:
 

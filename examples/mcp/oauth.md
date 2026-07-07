@@ -1,4 +1,4 @@
-# MCP OAuth Setup
+# MCP OAuth setup
 
 Use this endpoint in MCP clients that support hosted OAuth:
 
