@@ -1,5 +1,6 @@
 import readline from "node:readline";
 import net from "node:net";
+import { readFileSync } from "node:fs";
 import {
   configPath,
   getApiBaseUrlSource,
@@ -21,7 +22,18 @@ import { printJson, printKeyValue, printList, printNextCommands, printRunSummary
 import { buildBundle, defaultOutDir, writeBundle, OKF_USER_AGENT } from "./okf.js";
 import { createTheme, renderCommandsHelp, renderHelp, sanitizeTerminalText, styleStatus } from "./theme.js";
 
-const VERSION = "0.2.0";
+// Read the version from package.json so it can never drift from the published
+// release. Falls back to a literal only if the file cannot be read.
+const VERSION = resolveCliVersion();
+
+function resolveCliVersion() {
+  try {
+    const pkg = JSON.parse(readFileSync(new URL("../package.json", import.meta.url), "utf8"));
+    return pkg.version || "0.2.3";
+  } catch {
+    return "0.2.3";
+  }
+}
 const DEFAULT_POLL_INTERVAL_MS = 5000;
 const DEFAULT_MAX_WAIT_SECONDS = 900;
 const TERMINAL_RUN_STATUSES = new Set([
@@ -1167,7 +1179,7 @@ async function handleOkf(args, flags, io) {
         ["URL", theme.info(data.url)],
         ["Output", data.out],
         ["Files", String(data.files.length)],
-        ["Credits", "0 (ran locally — no account needed)"],
+        ["Credits", "0 (ran locally, no account needed)"],
       ],
       theme,
     );

@@ -2,6 +2,14 @@
 
 Notable changes to the public developer tools. The hosted engine ships on its own cadence.
 
+## 2026-07-07 (later)
+
+### Fixed
+- `@sleepwalkerai/cli` 0.2.3: `--version` and the `cli_version` field in
+  exported bundles now read the real package version instead of a stale
+  hardcoded string. Removed em dashes from CLI output (`okf export` summary
+  and `--help`).
+
 ## 2026-07-07
 
 ### Changed
