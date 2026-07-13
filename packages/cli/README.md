@@ -87,6 +87,28 @@ are truncated with a note in `log.md`.
 
 Add `--json` to print raw API responses.
 
+## Pick the AI model per run
+
+Every platform runs its default model unless you choose another one. List the
+options and prices, then pin a model with `--model`:
+
+```bash
+sleepwalker visibility models
+sleepwalker visibility run https://www.sleepwalker.ai \
+  --brand Sleepwalker \
+  --prompt "What are the best AI visibility tools?" \
+  --platform openai \
+  --model latest
+```
+
+`--model` takes a model id from `visibility models`, or one of the keywords
+`latest`, `prior`, and `default`, which resolve to the platform's current
+model for that role. With several platforms, scope each value:
+`--model openai=latest --model perplexity=sonar-pro`. Default-model probes
+cost 1 credit; each other model has its own per-probe price (run
+`sleepwalker visibility models` to see them). Run results record the exact
+model that answered.
+
 For retryable scripts, pass your own idempotency key on persisted run creation:
 
 ```bash

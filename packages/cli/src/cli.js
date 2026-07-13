@@ -29,9 +29,9 @@ const VERSION = resolveCliVersion();
 function resolveCliVersion() {
   try {
     const pkg = JSON.parse(readFileSync(new URL("../package.json", import.meta.url), "utf8"));
-    return pkg.version || "0.2.3";
+    return pkg.version || "0.3.0";
   } catch {
-    return "0.2.3";
+    return "0.3.0";
   }
 }
 const DEFAULT_POLL_INTERVAL_MS = 5000;
@@ -48,6 +48,14 @@ const PLATFORM_CHOICES = [
   { label: "Perplexity", value: "perplexity" },
   { label: "Grok", value: "grok" },
   { label: "Gemini", value: "gemini" },
+];
+
+// Role keywords resolve server-side to the platform's current model for that
+// slot. `sleepwalker visibility models` lists concrete ids and prices.
+const MODEL_CHOICES = [
+  { label: "Default model (1 credit per probe)", value: "" },
+  { label: "Latest flagship (priced per model, see `visibility models`)", value: "latest" },
+  { label: "Previous generation (priced per model, see `visibility models`)", value: "prior" },
 ];
 
 function makeError(message, exitCode = 1) {
@@ -580,19 +588,28 @@ async function handleInteractiveMenu(flags, io) {
           io.stdout.write(`${io.theme.warning("Cancelled.")}\n`);
           return;
         }
+        const model = await selectOption(io, "Choose model", MODEL_CHOICES);
+        if (!model) {
+          io.stdout.write(`${io.theme.warning("Cancelled.")}\n`);
+          return;
+        }
         const watch = await askConfirm(io, "Watch until the run finishes?");
         const confirmed = await askConfirm(io, "Queue this run now? It can use prepaid credits.");
         if (!confirmed) {
           io.stdout.write(`${io.theme.warning("Cancelled.")}\n`);
           return;
         }
-        await handleVisibility(["run", url], {
+        const runFlags = {
           brand,
           prompt,
           platform: platform.value,
           watch,
           "idempotency-key": interactiveIdempotencyKey(io, "visibility-run"),
-        }, io);
+        };
+        if (model.value) {
+          runFlags.model = model.value;
+        }
+        await handleVisibility(["run", url], runFlags, io);
       });
       continue;
     }
@@ -931,8 +948,33 @@ async function handleVisibility(args, flags, io) {
     return;
   }
 
+  if (command === "models") {
+    const payload = await client.get("/v1/visibility/models");
+    output(io.stdout, flags, payload, (data) => {
+      const platforms = data.platforms || {};
+      const roles = data.roles || {};
+      for (const [platform, options] of Object.entries(platforms)) {
+        io.stdout.write(`${theme.accent(platform)}\n`);
+        for (const option of options || []) {
+          const marker = option.default ? theme.info(" (default)") : "";
+          io.stdout.write(
+            `  ${theme.id(option.id)}${marker}  ${theme.muted(`${option.tier}, ${option.credits_per_probe} cr/probe`)}\n`,
+          );
+        }
+        const role = roles[platform];
+        if (role) {
+          io.stdout.write(`  ${theme.muted(`roles: latest=${role.latest} prior=${role.prior}`)}\n`);
+        }
+      }
+      printNextCommands(io.stdout, [
+        'sleepwalker visibility run <url> --brand <brand> --prompt <prompt> --platform openai --model latest',
+      ], theme);
+    });
+    return;
+  }
+
   if (command === "run") {
-    const url = urlArg(args.slice(1), flags, "Usage: sleepwalker visibility run <url> --brand <brand> --prompt <prompt> --platform <platform>");
+    const url = urlArg(args.slice(1), flags, "Usage: sleepwalker visibility run <url> --brand <brand> --prompt <prompt> --platform <platform> [--model <platform=model>]");
     const prompts = promptsFromFlags(flags);
     const platforms = splitCsvValues(flagList(flags, "platform"));
     if (!prompts.length) {
@@ -941,11 +983,26 @@ async function handleVisibility(args, flags, io) {
     if (!platforms.length) {
       throw makeError("Missing --platform <platform>.");
     }
+    // --model is repeatable: "platform=model" pairs, or a bare model/keyword
+    // when exactly one platform is requested. Values are catalog model ids or
+    // the keywords latest / prior / default; the server validates them.
+    const models = {};
+    for (const entry of splitCsvValues(flagList(flags, "model"))) {
+      const eq = entry.indexOf("=");
+      if (eq > 0) {
+        models[entry.slice(0, eq).trim()] = entry.slice(eq + 1).trim();
+      } else if (platforms.length === 1) {
+        models[platforms[0]] = entry.trim();
+      } else {
+        throw makeError(`Ambiguous --model ${entry}: with multiple platforms use --model <platform>=<model>.`);
+      }
+    }
     const payload = await client.post("/v1/visibility/runs", {
       url,
       target_entity: requireArg(flagString(flags, "brand", flagString(flags, "target", "")), "Missing --brand <brand>."),
       prompts,
       platforms,
+      models: Object.keys(models).length ? models : undefined,
       competitors: splitCsvValues(flagList(flags, "competitor")),
       language: flagString(flags, "language", "en"),
       country: flagString(flags, "country", "US"),

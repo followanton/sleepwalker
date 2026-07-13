@@ -574,6 +574,8 @@ test("interactive visibility run includes generated idempotency key", async () =
   setTimeout(() => stdin.write("Example\n"), 25);
   setTimeout(() => stdin.write("What is Example?\n"), 35);
   setTimeout(() => stdin.write("\r"), 45);
+  // Model choice (default) added between platform and watch prompts.
+  setTimeout(() => stdin.write("\r"), 50);
   setTimeout(() => stdin.write("n\n"), 55);
   setTimeout(() => stdin.write("y\n"), 65);
   setTimeout(() => stdin.write("\n"), 75);
@@ -583,6 +585,40 @@ test("interactive visibility run includes generated idempotency key", async () =
   assert.equal(new URL(requests[0].url).pathname, "/v1/visibility/runs");
   const body = JSON.parse(requests[0].options.body);
   assert.equal(body.idempotency_key, "idem-visibility-run");
+  assert.equal(body.models, undefined);
+});
+
+test("visibility run maps --model flags to the models object", async () => {
+  const { io, requests } = memoryIo({
+    env: { SLEEPWALKER_API_KEY: "sw_api_live_test" },
+    responses: [{ status: 200, body: { run_id: "vis_1", status: "queued" } }],
+  });
+  await runCli([
+    "visibility", "run", "https://example.com",
+    "--brand", "Example",
+    "--prompt", "What is Example?",
+    "--platform", "openai",
+    "--model", "latest",
+  ], io);
+  const body = JSON.parse(requests[0].options.body);
+  assert.deepEqual(body.models, { openai: "latest" });
+});
+
+test("visibility run rejects bare --model with multiple platforms", async () => {
+  const { io } = memoryIo({
+    env: { SLEEPWALKER_API_KEY: "sw_api_live_test" },
+    responses: [],
+  });
+  await assert.rejects(
+    () => runCli([
+      "visibility", "run", "https://example.com",
+      "--brand", "Example",
+      "--prompt", "What is Example?",
+      "--platform", "openai,perplexity",
+      "--model", "latest",
+    ], io),
+    /Ambiguous --model/,
+  );
 });
 
 test("finds reports by URL", async () => {

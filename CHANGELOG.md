@@ -2,6 +2,17 @@
 
 Notable changes to the public developer tools. The hosted engine ships on its own cadence.
 
+## 2026-07-13
+
+### Added
+- `@sleepwalkerai/cli` 0.3.0: pick the AI model per visibility run.
+  `sleepwalker visibility models` lists the selectable models per platform
+  with credit prices, and `--model` pins one (a model id, or the keywords
+  `latest`, `prior`, and `default`; scope per platform with
+  `--model openai=latest`). The interactive run flow gained a model step.
+  Each model has its own per-probe credit price; default models stay at
+  1 credit.
+
 ## 2026-07-07 (later)
 
 ### Fixed
@@ -29,7 +40,7 @@ Notable changes to the public developer tools. The hosted engine ships on its ow
 ### Added
 - `sleepwalker okf export <url>` (`@sleepwalkerai/cli` 0.2.0): build an
   [Open Knowledge Format](https://github.com/GoogleCloudPlatform/knowledge-catalog/tree/main/okf)
-  bundle from a web page — free, local, no account or credits. Dependency-free
+  bundle from a web page: free, local, no account or credits. Dependency-free
   local extraction to agent-ready markdown (`index.md`, `log.md`, one concept
   per page). See `docs/cli.md`.
 

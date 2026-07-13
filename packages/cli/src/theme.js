@@ -157,7 +157,8 @@ ${section("Local (free, no account, no credits)")}
 ${section("Actions")}
   ${command("sleepwalker page serialize <url>")} ${muted("[--max-chars 4000] [--offset 0]")}
   ${command("sleepwalker visibility suggest-prompts <url>")} ${muted("--brand <brand>")}
-  ${command("sleepwalker visibility run <url>")} ${muted("--brand <brand> --prompt <prompt> --platform <platform> [--watch] [--idempotency-key <key>]")}
+  ${command("sleepwalker visibility models")} ${muted("list selectable AI models per platform with credit prices")}
+  ${command("sleepwalker visibility run <url>")} ${muted("--brand <brand> --prompt <prompt> --platform <platform> [--model <platform=model|latest|prior>] [--watch] [--idempotency-key <key>]")}
   ${command("sleepwalker visibility status <run_id>")} ${muted("[--results]")}
   ${command("sleepwalker visibility list")} ${muted("[--limit 20] [--status queued|running|completed|failed]")}
   ${command("sleepwalker ci score <url>")}
