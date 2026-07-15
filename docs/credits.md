@@ -13,6 +13,10 @@ Examples of billable actions:
 - Content Intelligence scoring;
 - Content Intelligence runs.
 
+Credits for an AI Visibility run are reserved when the run is queued.
+Cancelling a run releases the reserved credits of probes that did not start;
+probes that already ran settle normally.
+
 Credits are managed in the hosted app:
 
 ```text

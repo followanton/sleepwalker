@@ -6,7 +6,7 @@ Sleepwalker MCP is a hosted remote MCP server for AI Visibility and Content Inte
 https://mcp.sleepwalker.ai/mcp
 ```
 
-Use it when an MCP-capable client or agent needs to read Sleepwalker reports, serialize public pages, suggest visibility prompts, create AI Visibility runs, score content, discover trends, or create Content Intelligence runs.
+Use it when an MCP-capable client or agent needs to read Sleepwalker reports, serialize public pages, suggest visibility prompts, create and cancel AI Visibility runs, score content, discover trends, or create Content Intelligence runs.
 
 ## Authentication
 

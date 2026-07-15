@@ -2,6 +2,15 @@
 
 Notable changes to the public developer tools. The hosted engine ships on its own cadence.
 
+## 2026-07-15
+
+### Added
+- Docs: AI Visibility runs can now be cancelled. The hosted API gained
+  `POST /v1/visibility/runs/{run_id}/cancel` and MCP gained
+  `cancel_sleepwalker_visibility_run`; probes that did not start release
+  their reserved credits. The MCP tool catalog also now lists
+  `list_sleepwalker_visibility_models` (selectable models with prices).
+
 ## 2026-07-13
 
 ### Added

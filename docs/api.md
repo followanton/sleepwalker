@@ -48,6 +48,27 @@ curl -s https://api.sleepwalker.ai/v1/visibility/runs/<run_id> \
   -H "Authorization: Bearer $SLEEPWALKER_API_KEY"
 ```
 
+### List selectable AI models
+
+Each platform runs its default model for 1 credit per probe. Other models have
+their own per-probe price:
+
+```bash
+curl -s https://api.sleepwalker.ai/v1/visibility/models \
+  -H "Authorization: Bearer $SLEEPWALKER_API_KEY"
+```
+
+### Cancel a run
+
+Stops the queued remainder of a run and releases the reserved credits of
+probes that did not start. Probes already executing finish and settle
+normally. Safe to repeat:
+
+```bash
+curl -s -X POST https://api.sleepwalker.ai/v1/visibility/runs/<run_id>/cancel \
+  -H "Authorization: Bearer $SLEEPWALKER_API_KEY"
+```
+
 ### Create a Content Intelligence run
 
 ```bash

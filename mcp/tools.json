@@ -106,6 +106,17 @@
       "credit_behavior": "Free read action."
     },
     {
+      "name": "list_sleepwalker_visibility_models",
+      "title": "List Sleepwalker visibility models",
+      "description": "List the AI models selectable per platform for visibility runs, with credit prices and role keywords.",
+      "required_scope": "runs:read",
+      "category": "read",
+      "read_only": true,
+      "billable": false,
+      "creates_run": false,
+      "credit_behavior": "Free read action."
+    },
+    {
       "name": "list_sleepwalker_content_runs",
       "title": "List Sleepwalker Content Intelligence runs",
       "description": "List saved Content Intelligence runs for the authenticated account.",
@@ -159,6 +170,17 @@
       "billable": true,
       "creates_run": true,
       "credit_behavior": "Uses prepaid credits per queued probe."
+    },
+    {
+      "name": "cancel_sleepwalker_visibility_run",
+      "title": "Cancel Sleepwalker visibility run",
+      "description": "Cancel the queued remainder of an AI Visibility run. Probes no worker has picked up never run; probes already executing finish and settle normally.",
+      "required_scope": "visibility:runs:create",
+      "category": "action",
+      "read_only": false,
+      "billable": false,
+      "creates_run": false,
+      "credit_behavior": "Free to call. Releases the reserved credits of probes that did not run."
     },
     {
       "name": "discover_sleepwalker_content_trends",

@@ -40,6 +40,7 @@ https://mcp.sleepwalker.ai/mcp
 | `get_sleepwalker_reports_by_url` | Find recent reports for a URL |
 | `list_sleepwalker_visibility_runs` | List AI Visibility runs |
 | `get_sleepwalker_visibility_run_status` | Status and results for a run |
+| `list_sleepwalker_visibility_models` | Selectable AI models and their credit prices |
 | `list_sleepwalker_content_runs` | List Content Intelligence runs |
 | `get_sleepwalker_content_run_status` | Status and result for a run |
 | `get_sleepwalker_prompt_response` | The full answer for one probe |
@@ -53,6 +54,7 @@ https://mcp.sleepwalker.ai/mcp
 | `serialize_sleepwalker_page_content` | URL to clean structured content | Billable action |
 | `suggest_sleepwalker_visibility_prompts` | Prompt ideas for a brand | Billable action |
 | `create_sleepwalker_visibility_run` | Queue an AI Visibility run | Billable by probe |
+| `cancel_sleepwalker_visibility_run` | Stop a run's queued probes | Releases reserved credits |
 | `discover_sleepwalker_content_trends` | Find relevant demand for a page | Billable action |
 | `score_sleepwalker_content` | Score a page, get fixes | Billable action |
 | `create_sleepwalker_content_run` | Persisted Content Intelligence run | Billable run |
