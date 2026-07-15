@@ -2,6 +2,16 @@
 
 Notable changes to the public developer tools. The hosted engine ships on its own cadence.
 
+## 2026-07-15 (later)
+
+### Fixed
+- `@sleepwalkerai/cli` 0.3.1: `visibility run` and `ci run` no longer send an
+  empty `idempotency_key` when the flag is omitted (a JavaScript default
+  parameter slip turned the omitted flag into an empty string, which the API
+  could reject as a duplicate on later keyless runs). The interactive model
+  picker and the README now say every model has its own per-probe price
+  instead of assuming all defaults cost 1 credit.
+
 ## 2026-07-15
 
 ### Added

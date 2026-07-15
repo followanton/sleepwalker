@@ -104,10 +104,10 @@ sleepwalker visibility run https://www.sleepwalker.ai \
 `--model` takes a model id from `visibility models`, or one of the keywords
 `latest`, `prior`, and `default`, which resolve to the platform's current
 model for that role. With several platforms, scope each value:
-`--model openai=latest --model perplexity=sonar-pro`. Default-model probes
-cost 1 credit; each other model has its own per-probe price (run
-`sleepwalker visibility models` to see them). Run results record the exact
-model that answered.
+`--model openai=latest --model perplexity=sonar-pro`. Every model has its
+own per-probe price, defaults included (run `sleepwalker visibility models`
+to see them; most platform defaults cost 1 credit). Run results record the
+exact model that answered.
 
 For retryable scripts, pass your own idempotency key on persisted run creation:
 

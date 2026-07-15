@@ -53,7 +53,7 @@ const PLATFORM_CHOICES = [
 // Role keywords resolve server-side to the platform's current model for that
 // slot. `sleepwalker visibility models` lists concrete ids and prices.
 const MODEL_CHOICES = [
-  { label: "Default model (1 credit per probe)", value: "" },
+  { label: "Default model (priced per platform, see `visibility models`)", value: "" },
   { label: "Latest flagship (priced per model, see `visibility models`)", value: "latest" },
   { label: "Previous generation (priced per model, see `visibility models`)", value: "prior" },
 ];
@@ -1006,7 +1006,7 @@ async function handleVisibility(args, flags, io) {
       competitors: splitCsvValues(flagList(flags, "competitor")),
       language: flagString(flags, "language", "en"),
       country: flagString(flags, "country", "US"),
-      idempotency_key: flagString(flags, "idempotency-key", undefined),
+      idempotency_key: flagString(flags, "idempotency-key") || undefined,
     });
     if (flagBool(flags, "watch")) {
       const watched = await pollUntilDone({
@@ -1116,7 +1116,7 @@ async function handleCi(args, flags, io) {
       analysis_depth: flagString(flags, "depth", "full"),
       language: flagString(flags, "language", "en"),
       country: flagString(flags, "country", "US"),
-      idempotency_key: flagString(flags, "idempotency-key", undefined),
+      idempotency_key: flagString(flags, "idempotency-key") || undefined,
     });
     if (flagBool(flags, "watch")) {
       const watched = await pollUntilDone({
