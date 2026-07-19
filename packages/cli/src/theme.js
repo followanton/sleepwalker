@@ -152,7 +152,7 @@ ${section("Read")}
   ${command("sleepwalker reports by-url <url>")} ${muted("[--type ai_citations|content_intelligence]")}
 
 ${section("Local (free, no account, no credits)")}
-  ${command("sleepwalker okf export <url>")} ${muted("[--out <dir>] [--force]  build an Open Knowledge Format bundle on your machine")}
+  ${command("sleepwalker okf export <url>")} ${muted("[--content | --technical] [--out <dir>] [--force]  build an Open Knowledge Format bundle on your machine")}
 
 ${section("Actions")}
   ${command("sleepwalker page serialize <url>")} ${muted("[--max-chars 4000] [--offset 0]")}

@@ -19,7 +19,7 @@ import {
   readLinesFromFile,
 } from "./args.js";
 import { printJson, printKeyValue, printList, printNextCommands, printRunSummary } from "./format.js";
-import { buildBundle, defaultOutDir, writeBundle, OKF_USER_AGENT } from "./okf.js";
+import { buildBundle, defaultOutDir, writeBundle, okfUserAgent } from "./okf.js";
 import { createTheme, renderCommandsHelp, renderHelp, sanitizeTerminalText, styleStatus } from "./theme.js";
 
 // Read the version from package.json so it can never drift from the published
@@ -1175,34 +1175,125 @@ async function handleCi(args, flags, io) {
   throw makeError("Unknown ci command. Run `sleepwalker --help`.");
 }
 
+// Follow redirects by hand so --technical can report the exact chain (status
+// per hop, https to http downgrades). Parity with redirect:"follow" otherwise:
+// same headers, no cookie jar, one 30s deadline shared across all hops.
+const OKF_MAX_REDIRECT_HOPS = 10;
+const OKF_REDIRECT_STATUSES = new Set([301, 302, 303, 307, 308]);
+
+async function okfFetchWithChain(fetchImpl, startUrl, headers) {
+  const chain = [];
+  const startedAt = Date.now();
+  const budgetMs = 30_000;
+  let current = startUrl;
+  for (let hop = 0; hop <= OKF_MAX_REDIRECT_HOPS; hop += 1) {
+    const remaining = budgetMs - (Date.now() - startedAt);
+    if (remaining <= 0) {
+      const error = new Error("timed out");
+      error.name = "TimeoutError";
+      throw error;
+    }
+    const response = await fetchImpl(current, {
+      redirect: "manual",
+      headers,
+      signal: typeof AbortSignal?.timeout === "function" ? AbortSignal.timeout(remaining) : undefined,
+    });
+    const location = response.headers?.get?.("location");
+    let next = "";
+    if (OKF_REDIRECT_STATUSES.has(response.status) && location) {
+      try {
+        // Location is resolved against the CURRENT hop, and only http(s)
+        // targets are followed; anything else is reported as the final stop.
+        const target = new URL(location, current);
+        if (target.protocol === "http:" || target.protocol === "https:") next = target.toString();
+      } catch {
+        next = "";
+      }
+    }
+    if (!next) {
+      chain.push({ url: response.url || current, status: response.status });
+      return { response, chain };
+    }
+    chain.push({ url: current, status: response.status });
+    try {
+      // Undici keeps the socket open until the hop body is consumed or cancelled.
+      await response.body?.cancel?.();
+    } catch {
+      // best effort
+    }
+    current = next;
+  }
+  throw makeError(`Could not fetch ${startUrl}: more than ${OKF_MAX_REDIRECT_HOPS} redirects.`);
+}
+
+function captureHeaders(headers) {
+  const bag = {};
+  if (!headers) return bag;
+  try {
+    if (typeof headers.forEach === "function") {
+      headers.forEach((value, name) => {
+        bag[String(name).toLowerCase()] = String(value);
+      });
+      return bag;
+    }
+    for (const [name, value] of Object.entries(headers)) {
+      bag[String(name).toLowerCase()] = String(value);
+    }
+  } catch {
+    // headers stay best effort; the bundle degrades to fewer sections
+  }
+  return bag;
+}
+
 async function handleOkf(args, flags, io) {
   const theme = io.theme;
-  const usage = "Usage: sleepwalker okf export <url> [--out <dir>] [--force]";
+  const usage = "Usage: sleepwalker okf export <url> [--content | --technical] [--out <dir>] [--force]";
   if (args[0] !== "export") {
     throw makeError(usage);
   }
-  const url = requireArg(args[1] || flagString(flags, "url", ""), usage);
+  // Flag parsing takes the next token as a flag value, so a mode flag typed
+  // before the URL swallows it; adopt it back and treat the flag as boolean.
+  let urlArg = args[1] || flagString(flags, "url", "");
+  for (const modeFlag of ["content", "technical"]) {
+    if (!urlArg && typeof flags[modeFlag] === "string" && /^https?:\/\//i.test(flags[modeFlag])) {
+      urlArg = flags[modeFlag];
+      flags[modeFlag] = true;
+    }
+  }
+  // Default exports everything; --content and --technical narrow the bundle.
+  const contentFlag = flagBool(flags, "content");
+  const technicalFlag = flagBool(flags, "technical");
+  const includeContent = contentFlag || !technicalFlag;
+  const technical = technicalFlag || !contentFlag;
+  const url = requireArg(urlArg, `${usage}\nPut flags after the URL.`);
   const fetchImpl = io.fetch || globalThis.fetch;
   if (typeof fetchImpl !== "function") {
     throw makeError("This command needs the built-in fetch (Node >= 18).");
   }
 
+  const fetchHeaders = { "user-agent": okfUserAgent(VERSION), accept: "text/html,application/xhtml+xml" };
   let response;
+  let redirectChain = [];
   try {
-    response = await fetchImpl(url, {
-      redirect: "follow",
-      headers: { "user-agent": OKF_USER_AGENT, accept: "text/html,application/xhtml+xml" },
-      // A hanging or slow-dripping server should fail the command, not stall it.
-      signal: typeof AbortSignal?.timeout === "function" ? AbortSignal.timeout(30_000) : undefined,
-    });
+    if (technical) {
+      ({ response, chain: redirectChain } = await okfFetchWithChain(fetchImpl, url, fetchHeaders));
+    } else {
+      response = await fetchImpl(url, {
+        redirect: "follow",
+        headers: fetchHeaders,
+        // A hanging or slow-dripping server should fail the command, not stall it.
+        signal: typeof AbortSignal?.timeout === "function" ? AbortSignal.timeout(30_000) : undefined,
+      });
+    }
   } catch (error) {
+    if (error?.exitCode) throw error;
     const reason = error?.name === "TimeoutError" ? "timed out after 30s" : error.message;
     throw makeError(`Could not fetch ${url}: ${reason}`);
   }
   if (!response.ok) {
     throw makeError(`Fetch failed for ${url}: HTTP ${response.status}.`);
   }
-  const finalUrl = response.url || url;
+  const finalUrl = response.url || redirectChain[redirectChain.length - 1]?.url || url;
   const extraNotes = [];
   const contentType = String(response.headers?.get?.("content-type") || "");
   if (contentType && !/html|xml/i.test(contentType)) {
@@ -1213,9 +1304,32 @@ async function handleOkf(args, flags, io) {
   if (html.length > MAX_HTML_CHARS) {
     html = html.slice(0, MAX_HTML_CHARS);
     extraNotes.push(`page exceeded ${MAX_HTML_CHARS} characters; extraction used the truncated beginning`);
+    if (technical) {
+      extraNotes.push("technical: extraction ran on truncated HTML; the tag inventory may be incomplete");
+    }
   }
+
+  // The technical snapshot needs only what the one page fetch already
+  // produced: the final response headers and the redirect chain.
+  let technicalInput;
+  if (technical) {
+    if (!redirectChain.length) redirectChain = [{ url: finalUrl, status: response.status }];
+    technicalInput = {
+      headers: captureHeaders(response.headers),
+      redirectChain,
+    };
+  }
+
   const now = new Date().toISOString();
-  const { files, summary } = buildBundle({ url: finalUrl, html, now, cliVersion: VERSION, extraNotes });
+  const { files, summary } = buildBundle({
+    url: finalUrl,
+    html,
+    now,
+    cliVersion: VERSION,
+    extraNotes,
+    technical: technicalInput,
+    includeContent,
+  });
   const outDir = flagString(flags, "out", "") || defaultOutDir(finalUrl);
   const { dir } = await writeBundle(outDir, files, { force: flagBool(flags, "force", false) });
 
@@ -1225,16 +1339,25 @@ async function handleOkf(args, flags, io) {
     okf_version: "0.1",
     credits: 0,
     concepts: summary.conceptCount,
+    content: Boolean(summary.content),
+    technical: Boolean(summary.technical),
     files: summary.files,
     notes: summary.notes,
   };
   output(io.stdout, flags, payload, (data) => {
     io.stdout.write(`${theme.accent("OKF bundle created")}\n\n`);
+    const conceptLabel =
+      data.content && data.technical
+        ? "content + technical (what AI crawlers see without running JS)"
+        : data.technical
+          ? "technical (what AI crawlers see without running JS)"
+          : "content";
     printKeyValue(
       io.stdout,
       [
         ["URL", theme.info(data.url)],
         ["Output", data.out],
+        ["Concepts", conceptLabel],
         ["Files", String(data.files.length)],
         ["Credits", "0 (ran locally, no account needed)"],
       ],

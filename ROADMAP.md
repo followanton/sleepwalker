@@ -5,8 +5,6 @@ What's next for Sleepwalker?
 ## Next
 
 - Open source page content serialization.
-- Run AI visibility for any model.
-- Technical SEO components serialization.
 
 ## Soon
  
@@ -15,6 +13,8 @@ What's next for Sleepwalker?
 
 ## Shipped
 
+- Technical SEO components serialization: part of every free, local `sleepwalker okf export` (`--technical` exports it alone).
+- Run AI visibility for any model: per-run model selection with per-model prices.
 - Open Knowledge Format export: free, local `sleepwalker okf export`.
 
 ## Exploring

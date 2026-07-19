@@ -2,6 +2,34 @@
 
 Notable changes to the public developer tools. The hosted engine ships on its own cadence.
 
+## 2026-07-19
+
+### Added
+- `@sleepwalkerai/cli` 0.4.0: every `okf export <url>` now writes a technical
+  snapshot concept next to the content concept, with the page's technical
+  layer exactly as served: the redirect chain and HTML size, curated HTTP
+  headers, the `<html>` lang and dir attributes, meta and title tags,
+  canonical links, icon and feed links, headings, hreflang, social and
+  article tags, head scripts, every JSON-LD block (re-emitted from parsed
+  data, invalid JSON flagged), a microdata and RDFa summary, links, images,
+  and the robots directives the page and response carry (meta robots and
+  `X-Robots-Tag`). Everything comes from the one page fetch; there are no
+  side requests. Most AI crawlers do not run JavaScript; this is what they
+  actually see. Runs locally, no account, zero credits.
+
+### Changed
+- `okf export` defaults to the full bundle (content plus technical). Use
+  `--content` for the previous content-only bundle, or `--technical` for
+  the snapshot alone. Exports also identify themselves with a versioned
+  user agent (`SleepwalkerCLI-OKF/<cli version>`).
+
+### Security
+- Bundle link labels derived from page titles are bracket-stripped, so a
+  hostile `<title>` cannot inject links into `index.md` or See also lines.
+  Code fences now grow past the longest backtick run in embedded content,
+  and header values and redirect URLs pass through the same
+  control-character sanitizer as page text.
+
 ## 2026-07-15 (later)
 
 ### Fixed

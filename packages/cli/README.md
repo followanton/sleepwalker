@@ -3,8 +3,9 @@
 Command-line client for the Sleepwalker API.
 
 Most commands are a thin client over the hosted API and do not run
-Sleepwalker analysis locally. The exception is `okf export`, which is free
-and runs entirely on your machine.
+Sleepwalker analysis locally. The exception is `okf export`, which is free,
+runs entirely on your machine, and exports both the page content and a
+technical snapshot of what AI crawlers see.
 
 Public package:
 
@@ -74,13 +75,22 @@ sleepwalker ci score https://www.sleepwalker.ai
 sleepwalker ci run https://www.sleepwalker.ai --depth full --watch
 sleepwalker activity list
 sleepwalker okf export https://www.sleepwalker.ai
+sleepwalker okf export https://www.sleepwalker.ai --content
+sleepwalker okf export https://www.sleepwalker.ai --technical
 ```
 
 `okf export` is free, open source (MIT, like the rest of this CLI), and runs
 entirely on your machine. It fetches the page and writes an
 [Open Knowledge Format](https://github.com/GoogleCloudPlatform/knowledge-catalog/tree/main/okf)
 bundle (agent-ready markdown) to a local directory. No account, no API key, no
-credits. Use `--out <dir>` to choose the destination and `--force` to overwrite.
+credits. By default the bundle holds two concepts: the page content as clean
+markdown, and a technical snapshot with meta tags, structured data, HTTP
+headers, the redirect chain, and robots directives exactly as served. Most
+AI crawlers do not run JavaScript, so the snapshot is what they actually
+see. The only network request is the page fetch itself. `--content` exports
+only the content concept, `--technical` only the snapshot; put flags after
+the URL. Use `--out <dir>` to choose the destination and `--force` to
+overwrite.
 Hostile page content is sanitized (control characters, ANSI escapes, and bidi
 overrides are stripped), fetches time out after 30 seconds, and oversized pages
 are truncated with a note in `log.md`.

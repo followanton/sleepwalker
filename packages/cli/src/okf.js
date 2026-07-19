@@ -13,6 +13,16 @@ import { mkdir, readdir, writeFile } from "node:fs/promises";
 import path from "node:path";
 
 import { sanitizeTerminalText } from "./theme.js";
+// Circular on purpose: okf-technical.js imports decodeEntities/absoluteUrl
+// from here. Both modules only export hoisted function declarations and call
+// across the boundary at runtime, so the cycle is safe under ESM.
+import {
+  TECHNICAL_TYPE,
+  extractTechnical,
+  renderTechnicalBody,
+  technicalDescription,
+  technicalTitle,
+} from "./okf-technical.js";
 
 // Bundles are "agent-ready markdown": hostile page bytes (control characters,
 // ANSI escapes, bidi overrides — raw or entity-encoded) must never reach the
@@ -23,8 +33,13 @@ function sanitizeText(value) {
 }
 
 export const OKF_VERSION = "0.1";
-export const OKF_USER_AGENT =
-  "SleepwalkerCLI-OKF/0.1 (+https://github.com/followanton/sleepwalker)";
+
+// The exporter identifies itself honestly to the sites it fetches. Carrying
+// the CLI version means adoption per release is visible in the logs of sites
+// people export, including our own.
+export function okfUserAgent(cliVersion) {
+  return `SleepwalkerCLI-OKF/${cliVersion || OKF_VERSION} (+https://github.com/followanton/sleepwalker)`;
+}
 
 const RESERVED_FILENAMES = new Set(["index.md", "log.md"]);
 
@@ -313,6 +328,13 @@ export function extractConcept(html, url) {
   };
 }
 
+// Markdown link labels are page-derived titles; a hostile title such as
+// "a](http://evil.example/x) [b" would otherwise inject a live link into
+// index.md and every See also line. Labels lose brackets, links stay intact.
+function mdLinkLabel(value) {
+  return sanitizeText(String(value ?? "")).replace(/[[\]()]/g, "");
+}
+
 function yamlScalar(value) {
   const s = sanitizeText(String(value == null ? "" : value))
     .replace(/\\/g, "\\\\")
@@ -335,7 +357,7 @@ export function renderConcept({ type, title, description, resource, tags, timest
   lines.push(body || "");
   if (Array.isArray(seeAlso) && seeAlso.length) {
     lines.push("", "## See also");
-    for (const item of seeAlso) lines.push(`- [${item.title}](/${item.slug}.md)`);
+    for (const item of seeAlso) lines.push(`- [${mdLinkLabel(item.title)}](/${item.slug}.md)`);
   }
   return `${lines.join("\n").trimEnd()}\n`;
 }
@@ -344,7 +366,7 @@ export function renderIndex(concepts, { title } = {}) {
   const lines = ["---", `okf_version: "${OKF_VERSION}"`, "---", "", `# ${title || "Knowledge Bundle"}`, ""];
   for (const c of concepts) {
     const desc = c.description ? ` - ${c.description}` : "";
-    lines.push(`* [${c.title || c.slug}](/${c.slug}.md)${desc}`);
+    lines.push(`* [${mdLinkLabel(c.title || c.slug)}](/${c.slug}.md)${desc}`);
   }
   return `${lines.join("\n").trimEnd()}\n`;
 }
@@ -366,26 +388,72 @@ export function renderLog({ url, timestamp, cliVersion, conceptCount, notes }) {
 }
 
 // Assemble a full single-page bundle (pure). Returns { files, summary }.
-export function buildBundle({ url, html, now, cliVersion, extraNotes }) {
+// `technical` is optional: { headers, redirectChain } captured from the one
+// page fetch; when present the bundle gains a <slug>-technical.md concept.
+// `includeContent` (default true) controls whether the content concept is
+// written; extraction always runs so the technical concept keeps the page
+// title and word count. At least one concept is always emitted: a bundle
+// with neither would be empty, so content wins when both are switched off.
+export function buildBundle({ url, html, now, cliVersion, extraNotes, technical, includeContent = true }) {
   const timestamp = now || new Date().toISOString();
   const concept = extractConcept(html, url);
   const slug = slugForUrl(concept.resource || url);
   const notes = Array.isArray(extraNotes) ? extraNotes.filter(Boolean).map(sanitizeText) : [];
-  if (!concept.body) notes.push("no readable content extracted from the page");
+  const withContent = includeContent || !technical;
+  if (withContent && !concept.body) notes.push("no readable content extracted from the page");
+
+  const indexEntries = [];
+  if (withContent) indexEntries.push({ slug, title: concept.title, description: concept.description });
+  let conceptSeeAlso;
+  let technicalFile;
+  if (technical) {
+    const techSlug = `${slug}-technical`;
+    const techTitle = technicalTitle(concept.title, url);
+    const techDescription = technicalDescription(url);
+    const techData = extractTechnical(html, {
+      url,
+      headers: technical.headers,
+      redirectChain: technical.redirectChain,
+      contentWordCount: concept.body ? concept.body.split(/\s+/).filter(Boolean).length : 0,
+    });
+    technicalFile = {
+      name: `${techSlug}.md`,
+      content: renderConcept({
+        type: TECHNICAL_TYPE,
+        title: techTitle,
+        description: techDescription,
+        resource: concept.resource,
+        tags: ["technical"],
+        timestamp,
+        body: renderTechnicalBody(techData),
+        seeAlso: withContent ? [{ title: concept.title, slug }] : undefined,
+      }),
+    };
+    indexEntries.push({ slug: techSlug, title: techTitle, description: techDescription });
+    if (withContent) conceptSeeAlso = [{ title: techTitle, slug: techSlug }];
+    for (const note of techData.notes) notes.push(`technical: ${note}`);
+  }
 
   const files = {};
-  files[`${slug}.md`] = renderConcept({ ...concept, timestamp });
-  files["index.md"] = renderIndex([{ slug, title: concept.title, description: concept.description }], {
-    title: concept.title,
+  if (withContent) files[`${slug}.md`] = renderConcept({ ...concept, timestamp, seeAlso: conceptSeeAlso });
+  if (technicalFile) files[technicalFile.name] = technicalFile.content;
+  files["index.md"] = renderIndex(indexEntries, { title: concept.title });
+  files["log.md"] = renderLog({
+    url,
+    timestamp,
+    cliVersion,
+    conceptCount: indexEntries.length,
+    notes,
   });
-  files["log.md"] = renderLog({ url, timestamp, cliVersion, conceptCount: 1, notes });
 
   return {
     files,
     summary: {
       url,
       resource: concept.resource,
-      conceptCount: 1,
+      conceptCount: indexEntries.length,
+      content: withContent,
+      technical: Boolean(technical),
       files: Object.keys(files),
       credits: 0,
       title: concept.title,

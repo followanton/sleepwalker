@@ -28,10 +28,19 @@ function memoryIo({ env = {}, responses = [] } = {}) {
         requests.push({ url: String(url), options });
         const next = responses[responseIndex] || { status: 200, body: {} };
         responseIndex += 1;
+        if (next.error) {
+          const error = new Error(next.error.message || "network error");
+          error.name = next.error.name || "Error";
+          throw error;
+        }
         return {
           ok: next.status >= 200 && next.status < 300,
           status: next.status,
-          text: async () => JSON.stringify(next.body),
+          url: next.url || String(url),
+          // Map matches the Headers surface the CLI relies on (get/forEach);
+          // scripted entries use lowercase names, like real Headers.
+          headers: new Map(Object.entries(next.headers || {})),
+          text: async () => (typeof next.body === "string" ? next.body : JSON.stringify(next.body)),
         };
       },
     },
@@ -668,4 +677,149 @@ test("prints JSON errors for API failures", async () => {
     /insufficient_credits/,
   );
   assert.match(stdout(), /"error": "insufficient_credits"/);
+});
+
+// --- okf export --technical handler ---
+
+const TECH_PAGE = `<!doctype html><html><head>
+<title>Start Page</title>
+<meta name="description" content="A start page.">
+<meta name="robots" content="index">
+<script type="application/ld+json">{"@type":"WebSite","name":"Start"}</script>
+</head><body><main><h1>Start</h1><p>Hello world content.</p></main></body></html>`;
+
+function okfTmpDir() {
+  return fs.mkdtempSync(path.join(os.tmpdir(), "sleepwalker-okf-test-"));
+}
+
+test("okf export by default captures the redirect chain with a single page fetch", async () => {
+  const out = okfTmpDir();
+  const { io, stdout, requests } = memoryIo({
+    responses: [
+      { status: 301, headers: { location: "/landing" } },
+      { status: 200, body: TECH_PAGE, headers: { "content-type": "text/html; charset=utf-8", "x-robots-tag": "noai", server: "edge-1" } },
+    ],
+  });
+  await runCli(["okf", "export", "https://a.example/start", "--out", out, "--json"], io);
+
+  // Fetch behavior: manual redirects hop by hop, and nothing else. The
+  // technical snapshot is strictly page extraction, no side requests.
+  assert.equal(requests.length, 2);
+  assert.equal(requests[0].options.redirect, "manual");
+  assert.equal(requests[0].url, "https://a.example/start");
+  const pkg = JSON.parse(fs.readFileSync(new URL("../package.json", import.meta.url), "utf8"));
+  assert.equal(
+    requests[0].options.headers["user-agent"],
+    `SleepwalkerCLI-OKF/${pkg.version} (+https://github.com/followanton/sleepwalker)`,
+  );
+  assert.equal(requests[1].url, "https://a.example/landing");
+
+  const payload = JSON.parse(stdout());
+  assert.equal(payload.content, true);
+  assert.equal(payload.technical, true);
+  assert.equal(payload.concepts, 2);
+  assert.equal(payload.credits, 0);
+
+  const technicalFile = fs.readFileSync(path.join(out, "landing-technical.md"), "utf8");
+  assert.match(technicalFile, /\ntype: "TechnicalSnapshot"\n/);
+  assert.match(technicalFile, /1\. HTTP 301 https:\/\/a\.example\/start/);
+  assert.match(technicalFile, /2\. HTTP 200 https:\/\/a\.example\/landing/);
+  assert.match(technicalFile, /X-Robots-Tag header: noai/);
+  assert.doesNotMatch(technicalFile, /robots\.txt/);
+  assert.doesNotMatch(technicalFile, /llms\.txt/);
+  assert.match(technicalFile, /"@type":"WebSite"/);
+
+  const contentFile = fs.readFileSync(path.join(out, "landing.md"), "utf8");
+  assert.match(contentFile, /## See also\n- \[Technical snapshot: Start Page\]\(\/landing-technical\.md\)/);
+});
+
+test("okf export --technical fails hard past the redirect hop cap", async () => {
+  const out = okfTmpDir();
+  const hops = Array.from({ length: 12 }, () => ({ status: 301, headers: { location: "/loop" } }));
+  const { io } = memoryIo({ responses: hops });
+  await assert.rejects(
+    () => runCli(["okf", "export", "https://a.example/start", "--technical", "--out", out], io),
+    /more than 10 redirects/,
+  );
+});
+
+test("okf export --technical is technical-only with a single page fetch", async () => {
+  const out = okfTmpDir();
+  const { io, stdout, requests } = memoryIo({
+    responses: [{ status: 200, body: TECH_PAGE, headers: { "content-type": "text/html" } }],
+  });
+  await runCli(["okf", "export", "https://a.example/start", "--technical", "--out", out, "--json"], io);
+  assert.equal(requests.length, 1);
+  const payload = JSON.parse(stdout());
+  assert.equal(payload.technical, true);
+  assert.equal(payload.content, false);
+  assert.equal(payload.concepts, 1);
+  assert.deepEqual(fs.readdirSync(out).sort(), ["index.md", "log.md", "start-technical.md"]);
+  const technicalOnly = fs.readFileSync(path.join(out, "start-technical.md"), "utf8");
+  assert.doesNotMatch(technicalOnly, /## See also/);
+  assert.match(technicalOnly, /Meta robots: index/);
+});
+
+test("okf export --content keeps the lightweight single-fetch behavior", async () => {
+  const out = okfTmpDir();
+  const { io, stdout, requests } = memoryIo({
+    responses: [{ status: 200, body: TECH_PAGE, headers: { "content-type": "text/html" } }],
+  });
+  await runCli(["okf", "export", "https://a.example/start", "--content", "--out", out, "--json"], io);
+  assert.equal(requests.length, 1); // one GET, no robots or llms fetch
+  assert.equal(requests[0].options.redirect, "follow");
+  const payload = JSON.parse(stdout());
+  assert.equal(payload.content, true);
+  assert.equal(payload.technical, false);
+  assert.equal(payload.concepts, 1);
+  assert.deepEqual(fs.readdirSync(out).sort(), ["index.md", "log.md", "start.md"]);
+  const contentFile = fs.readFileSync(path.join(out, "start.md"), "utf8");
+  assert.doesNotMatch(contentFile, /## See also/);
+});
+
+test("okf export with both mode flags exports both concepts", async () => {
+  const out = okfTmpDir();
+  const { io, stdout } = memoryIo({
+    responses: [{ status: 200, body: TECH_PAGE, headers: { "content-type": "text/html" } }],
+  });
+  await runCli(
+    ["okf", "export", "https://a.example/start", "--content", "--technical", "--out", out, "--json"],
+    io,
+  );
+  const payload = JSON.parse(stdout());
+  assert.equal(payload.content, true);
+  assert.equal(payload.technical, true);
+  assert.equal(payload.concepts, 2);
+  assert.deepEqual(
+    fs.readdirSync(out).sort(),
+    ["index.md", "log.md", "start-technical.md", "start.md"],
+  );
+});
+
+test("okf export recovers the URL when a mode flag is typed before it", async () => {
+  const out = okfTmpDir();
+  const technicalFirst = memoryIo({
+    responses: [{ status: 200, body: TECH_PAGE, headers: { "content-type": "text/html" } }],
+  });
+  await runCli(
+    ["okf", "export", "--technical", "https://a.example/start", "--out", out, "--json"],
+    technicalFirst.io,
+  );
+  const technicalPayload = JSON.parse(technicalFirst.stdout());
+  assert.equal(technicalPayload.technical, true);
+  assert.equal(technicalPayload.content, false);
+  assert.equal(technicalPayload.url, "https://a.example/start");
+
+  const contentOut = okfTmpDir();
+  const contentFirst = memoryIo({
+    responses: [{ status: 200, body: TECH_PAGE, headers: { "content-type": "text/html" } }],
+  });
+  await runCli(
+    ["okf", "export", "--content", "https://a.example/start", "--out", contentOut, "--json"],
+    contentFirst.io,
+  );
+  const contentPayload = JSON.parse(contentFirst.stdout());
+  assert.equal(contentPayload.content, true);
+  assert.equal(contentPayload.technical, false);
+  assert.equal(contentPayload.url, "https://a.example/start");
 });

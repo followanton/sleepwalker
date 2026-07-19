@@ -44,6 +44,10 @@ Try the CLI without an account first. `okf export` is free and open source. It r
 npx -y @sleepwalkerai/cli okf export https://www.sleepwalker.ai
 ```
 
+One command exports both concepts: the page content and the technical
+snapshot of what AI crawlers see. Narrow it with `--content` or
+`--technical`. Both concepts are described in the next section.
+
 For everything else, install the CLI:
 
 ```bash
@@ -67,6 +71,35 @@ sleepwalker visibility run https://yourbrand.com \
   <img src="assets/terminal.svg" alt="Sleepwalker CLI running an AI Visibility check" width="92%">
 </p>
 
+## The free OKF export: content and technical
+
+One command turns any public page into an [Open Knowledge Format](https://github.com/GoogleCloudPlatform/knowledge-catalog/tree/main/okf) bundle: a folder of plain markdown files with YAML frontmatter that any AI agent can read directly. OKF is an open format published in Google Cloud's knowledge-catalog repo. The export runs entirely on your machine and is free for everyone: no account, no API key, no credits.
+
+```text
+sleepwalker.ai-okf/
+├── index.md            navigation and okf_version
+├── log.md              how and when the bundle was generated
+├── home.md             the content concept
+└── home-technical.md   the technical snapshot
+```
+
+Both concepts ship by default. `--content` exports only the content concept,
+`--technical` exports only the snapshot.
+
+**The content concept** is the page as a reader sees it: clean markdown with headings, paragraphs, lists, and links, plus the title, description, canonical URL, and timestamp in the frontmatter. Use it to hand pages to agents, prompts, and retrieval pipelines without HTML noise.
+
+**The technical snapshot** is the page as an AI crawler sees it. Most AI crawlers do not run JavaScript, so the snapshot reads only the served HTML plus the response itself: the redirect chain and HTML size, curated HTTP headers, the html lang attribute, meta and title tags, canonical, icon and feed links, headings, hreflang, social tags, head scripts, every JSON-LD block, a microdata and RDFa summary, links, images, and the robots directives the page and response carry (meta robots and X-Robots-Tag). Use it to audit what ChatGPT, Claude, Perplexity, and Gemini can actually read on your pages.
+
+One excerpt shows why this matters. A client-side rendered page often exports like this:
+
+```text
+## Structured data
+
+JSON-LD: none found. AI crawlers get no schema.org data from this page as served.
+```
+
+Everything is reported, nothing is judged: the export quotes what the page serves and leaves conclusions to you. Duplicate titles and canonicals are preserved on purpose, because they are findings. The only network request is the page fetch itself. Flags, caps, and the full section list live in [`docs/cli.md`](docs/cli.md).
+
 Want to see the shape of the data first? Open [`docs/responses.md`](docs/responses.md) for full example outputs from serialization, prompt suggestions, AI Visibility, Content Intelligence, and report lookup.
 
 ## What you can build
@@ -80,6 +113,7 @@ Want to see the shape of the data first? Open [`docs/responses.md`](docs/respons
 - **Product integrations**: use the API from internal tools, client portals, reporting pipelines, or automated QA checks.
 - **Content review**: inspect what a page says, which trends it misses, and what to fix first.
 - **Free page export**: turn any public page into agent-ready markdown with `okf export`. Open source, runs locally, no account needed.
+- **Free technical snapshot**: every `okf export` also captures the page's technical layer as served, including meta tags, structured data, headers, and robots directives. `--technical` exports it alone.
 - **Custom workflows**: combine Sleepwalker with other MCP servers to build your own skills and automations.
 
 ## Access paths
