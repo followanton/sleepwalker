@@ -1,7 +1,31 @@
 {
   "name": "@sleepwalkerai/cli",
-  "version": "0.4.0",
-  "description": "Command-line client for the Sleepwalker API.",
+  "version": "0.4.1",
+  "description": "AI visibility and content intelligence CLI, with a free local OKF export of page content and the technical layer AI crawlers see.",
+  "keywords": [
+    "ai-visibility",
+    "ai-search",
+    "geo",
+    "seo",
+    "okf",
+    "open-knowledge-format",
+    "structured-data",
+    "json-ld",
+    "crawler",
+    "markdown",
+    "llm",
+    "cli"
+  ],
+  "homepage": "https://www.sleepwalker.ai",
+  "bugs": {
+    "url": "https://github.com/followanton/sleepwalker/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/followanton/sleepwalker.git",
+    "directory": "packages/cli"
+  },
+  "author": "Sleepwalker AI <info@sleepwalker.ai> (https://www.sleepwalker.ai)",
   "type": "module",
   "bin": {
     "sleepwalker": "bin/sleepwalker.js"

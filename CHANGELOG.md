@@ -2,6 +2,12 @@
 
 Notable changes to the public developer tools. The hosted engine ships on its own cadence.
 
+## 2026-07-19 (later)
+
+### Changed
+- `@sleepwalkerai/cli` 0.4.1: package metadata for the npm page (description,
+  keywords, repository, homepage, bugs, author). No code changes.
+
 ## 2026-07-19
 
 ### Added
