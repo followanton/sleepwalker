@@ -186,6 +186,63 @@ test("control chars between blocks do not leave orphaned blank-line runs", () =>
   assert.match(concept, /First paragraph\.\n\nSecond paragraph\./);
 });
 
+test("screen-reader-only text and tablist chrome are dropped from content", () => {
+  // Modeled on apple.com's media gallery dot nav: visually hidden slide
+  // labels inside a role="tablist" list.
+  const html = `<html><head><title>Store</title></head><body><main>
+    <a class="sr-only" href="#main">Skip to content</a>
+    <h2>Endless entertainment.</h2>
+    <ul role="tablist">
+      <li role="presentation"><a href="#g1" role="tab"><span class="visuallyhidden">Item 1</span></a></li>
+      <li role="presentation"><a href="#g2" role="tab"><span class="visuallyhidden">Item 2</span></a></li>
+    </ul>
+    <p>Real paragraph text.</p>
+    <span class="visually-hidden">hidden hyphen variant</span>
+    <span class="menu-sr-only-toggle">kept, class token differs</span>
+    <p><span class="screen-reader-text">hidden wp variant</span>Visible tail.</p>
+  </main></body></html>`;
+  const c = extractConcept(html, "https://acme.example/store");
+  assert.match(c.body, /# Endless entertainment\./);
+  assert.match(c.body, /Real paragraph text\./);
+  assert.match(c.body, /Visible tail\./);
+  assert.match(c.body, /kept, class token differs/);
+  assert.doesNotMatch(c.body, /Item 1/);
+  assert.doesNotMatch(c.body, /Item 2/);
+  assert.doesNotMatch(c.body, /Skip to content/);
+  assert.doesNotMatch(c.body, /hidden hyphen variant/);
+  assert.doesNotMatch(c.body, /hidden wp variant/);
+});
+
+test("hidden-element removal survives nesting; unclosed tags fail open", () => {
+  // A hidden span containing another span is removed to its true close.
+  const nested = extractConcept(
+    `<html><body><main>
+    <p>Before.</p>
+    <span class="visuallyhidden">outer <span>inner</span> label</span>
+    <p>After.</p>
+  </main></body></html>`,
+    "https://acme.example/nest",
+  );
+  assert.doesNotMatch(nested.body, /outer|inner|label/);
+  assert.match(nested.body, /Before\./);
+  assert.match(nested.body, /After\./);
+
+  // A hidden span inside a non-hidden <p> is still found and removed.
+  const inParagraph = extractConcept(
+    `<html><body><main><p><span class="sr-only">hidden</span>Visible.</p></main></body></html>`,
+    "https://acme.example/inp",
+  );
+  assert.doesNotMatch(inParagraph.body, /hidden/);
+  assert.match(inParagraph.body, /Visible\./);
+
+  // An unclosed hidden tag fails open: keeping text beats eating the page.
+  const unclosed = extractConcept(
+    `<html><body><main><span class="visuallyhidden">never closed <p>Tail.</p></main></body></html>`,
+    "https://acme.example/unclosed",
+  );
+  assert.match(unclosed.body, /Tail\./);
+});
+
 test("buildBundle with technical input emits a conformant, cross-linked second concept", () => {
   const { files, summary } = buildBundle({
     url: "https://acme.example/pricing",

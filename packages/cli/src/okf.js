@@ -128,9 +128,76 @@ function removeBlock(html, tag) {
   return html.replace(re, " ");
 }
 
+// Screen-reader-only class conventions: text hidden from sighted readers
+// purely via CSS (clip/position tricks). The content concept renders the
+// reader's view, so carousel dot labels like "Item 1" in a visuallyhidden
+// span are noise here; the technical snapshot keeps as-served fidelity.
+// Token-boundary match so "menu-sr-only-toggle" style names stay untouched.
+const HIDDEN_CLASS_RE = /(?:^|\s)(?:visually-?hidden|sr-only|screen-reader(?:-\w+)*)(?:\s|$)/i;
+
+// Quote-aware attribute run for open tags (never stops at ">" in a value).
+const ATTRS_RE_SRC = `((?:[^>"']|"[^"]*"|'[^']*')*)`;
+
+// Find the end of an element by scanning forward from just after its open
+// tag, counting same-name nesting. Returns -1 when the tag never closes,
+// so callers fail open: leaking visible text beats eating the document.
+function findElementEnd(html, tag, from) {
+  const re = new RegExp(`</?${tag}\\b(?:[^>"']|"[^"]*"|'[^']*')*>`, "gi");
+  re.lastIndex = from;
+  let depth = 1;
+  let m;
+  while ((m = re.exec(html))) {
+    if (m[0][1] === "/") {
+      depth -= 1;
+      if (depth === 0) return m.index + m[0].length;
+    } else if (!m[0].endsWith("/>")) {
+      depth += 1;
+    }
+  }
+  return -1;
+}
+
+// Remove each element (with its content) whose open-tag attributes match the
+// predicate. Scans open tags directly so hidden elements nested inside other
+// matching-name elements are still found, and depth-counts to the true close
+// so same-name nesting inside the removed element cannot cut it short.
+function removeMatchingElements(html, tagAlternation, attrsPredicate) {
+  const openRe = new RegExp(`<(${tagAlternation})\\b${ATTRS_RE_SRC}>`, "gi");
+  let out = "";
+  let last = 0;
+  let m;
+  while ((m = openRe.exec(html))) {
+    if (!attrsPredicate(m[2])) continue;
+    const end = findElementEnd(html, m[1], m.index + m[0].length);
+    if (end === -1) continue;
+    out += html.slice(last, m.index) + " ";
+    last = end;
+    openRe.lastIndex = end;
+  }
+  return out + html.slice(last);
+}
+
+function removeScreenReaderOnly(html) {
+  return removeMatchingElements(html, "span|div|p|li|a|button|h[1-6]", (attrs) => {
+    const classMatch = /\bclass\s*=\s*(?:"([^"]*)"|'([^']*)')/i.exec(attrs);
+    const cls = classMatch ? (classMatch[1] ?? classMatch[2]) : "";
+    return HIDDEN_CLASS_RE.test(cls);
+  });
+}
+
+// Carousel dot navs and tab strips declare themselves: role="tablist" is
+// interaction chrome by definition, never reading content.
+function removeTablists(html) {
+  return removeMatchingElements(html, "ul|ol|div|nav", (attrs) =>
+    /\brole\s*=\s*["']?tablist["']?/i.test(attrs),
+  );
+}
+
 function removeNoise(html) {
   let out = html.replace(/<!--[\s\S]*?-->/g, " ");
   for (const tag of NOISE_BLOCKS) out = removeBlock(out, tag);
+  out = removeTablists(out);
+  out = removeScreenReaderOnly(out);
   // Drop any self-closing/dangling noise open tags left behind.
   return out;
 }

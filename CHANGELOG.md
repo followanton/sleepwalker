@@ -2,6 +2,18 @@
 
 Notable changes to the public developer tools. The hosted engine ships on its own cadence.
 
+## 2026-07-30
+
+### Changed
+- `@sleepwalkerai/cli` 0.4.2: the content concept now drops screen-reader-only
+  text (the `visuallyhidden`, `visually-hidden`, `sr-only`, and
+  `screen-reader-*` class conventions) and `role="tablist"` carousel chrome,
+  so hidden slide labels such as "Item 1" no longer surface as page content.
+  Elements are removed to their true close with same-tag nesting handled;
+  unclosed tags fail open and keep their text. The technical snapshot is
+  unchanged and keeps as-served fidelity. npm keywords gained
+  `llm-citations`, `generative-engine-optimization`, and `mcp`.
+
 ## 2026-07-19 (later)
 
 ### Changed
